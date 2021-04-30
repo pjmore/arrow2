@@ -15,14 +15,14 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use chrono::Datelike;
+use chrono::{Datelike, Timelike};
 
 use crate::{
     array::{
         Array, DictionaryKey, DictionaryPrimitive, Offset, Primitive, PrimitiveArray,
         TryFromIterator, Utf8Array, Utf8Primitive,
     },
-    datatypes::DataType,
+    datatypes::{DataType, IntervalUnit, TimeUnit},
     types::NativeType,
 };
 use crate::{error::Result, temporal_conversions::EPOCH_DAYS_FROM_CE};
@@ -48,29 +48,77 @@ where
     Ok(Box::new(array))
 }
 
-pub fn to_date32<O: Offset>(array: &dyn Array, to_type: &DataType) -> PrimitiveArray<i32> {
-    let array = array.as_any().downcast_ref::<Utf8Array<O>>().unwrap();
-
-    let iter = array.iter().map(|x| {
-        x.and_then(|x| {
+pub fn to_i32<O: Offset>(array: &Utf8Array<O>, to_type: &DataType) -> PrimitiveArray<i32> {
+    let converter = match to_type {
+        DataType::Int32 => |x: &str| lexical_core::parse::<i32>(x.as_bytes()).ok(),
+        DataType::Date32 => |x: &str| {
             x.parse::<chrono::NaiveDate>()
                 .ok()
                 .map(|x| x.num_days_from_ce() - EPOCH_DAYS_FROM_CE)
-        })
-    });
+        },
+        DataType::Time32(TimeUnit::Second) => |x: &str| {
+            x.parse::<chrono::NaiveTime>()
+                .ok()
+                .map(|x| x.num_seconds_from_midnight() as i32)
+        },
+        DataType::Time32(TimeUnit::Millisecond) => |x: &str| {
+            x.parse::<chrono::NaiveTime>()
+                .ok()
+                .map(|x| x.num_seconds_from_midnight() as i32 * 1000)
+        },
+        DataType::Interval(IntervalUnit::YearMonth) => {
+            |x: &str| lexical_core::parse::<i32>(x.as_bytes()).ok()
+        }
+        _ => unreachable!(),
+    };
+    let iter = array.iter().map(|x| x.and_then(converter));
     Primitive::<i32>::from_trusted_len_iter(iter).to(to_type.clone())
 }
 
-pub fn to_date64<O: Offset>(array: &dyn Array, to_type: &DataType) -> PrimitiveArray<i64> {
-    let array = array.as_any().downcast_ref::<Utf8Array<O>>().unwrap();
-
-    let iter = array.iter().map(|x| {
-        x.and_then(|x| {
+pub fn to_i64<O: Offset>(array: &Utf8Array<O>, to_type: &DataType) -> PrimitiveArray<i64> {
+    let converter = match to_type {
+        DataType::Int64 | DataType::Duration(_) => {
+            |x: &str| lexical_core::parse::<i64>(x.as_bytes()).ok()
+        }
+        DataType::Date64 => |x: &str| {
             x.parse::<chrono::NaiveDateTime>()
                 .ok()
                 .map(|x| x.timestamp_millis())
-        })
-    });
+        },
+        DataType::Time64(TimeUnit::Microsecond) => |x: &str| {
+            x.parse::<chrono::NaiveTime>().ok().map(|x| {
+                x.num_seconds_from_midnight() as i64 * 1_000_000 + x.nanosecond() as i64 / 1000
+            })
+        },
+        DataType::Time64(TimeUnit::Nanosecond) => |x: &str| {
+            x.parse::<chrono::NaiveTime>().ok().map(|x| {
+                x.num_seconds_from_midnight() as i64 * 1_000_000_000 + x.nanosecond() as i64
+            })
+        },
+        DataType::Timestamp(TimeUnit::Nanosecond, None) => |x: &str| {
+            x.parse::<chrono::NaiveDateTime>()
+                .ok()
+                .map(|x| x.timestamp_nanos())
+        },
+        DataType::Timestamp(TimeUnit::Microsecond, None) => |x: &str| {
+            x.parse::<chrono::NaiveDateTime>()
+                .ok()
+                .map(|x| x.timestamp_nanos() * 1000)
+        },
+        DataType::Timestamp(TimeUnit::Millisecond, None) => |x: &str| {
+            x.parse::<chrono::NaiveDateTime>()
+                .ok()
+                .map(|x| x.timestamp_millis())
+        },
+        DataType::Timestamp(TimeUnit::Second, None) => |x: &str| {
+            x.parse::<chrono::NaiveDateTime>()
+                .ok()
+                .map(|x| x.timestamp_millis() / 1000)
+        },
+        _ => unreachable!(),
+    };
+
+    let iter = array.iter().map(|x| x.and_then(converter));
     Primitive::<i64>::from_trusted_len_iter(iter).to(to_type.clone())
 }
 

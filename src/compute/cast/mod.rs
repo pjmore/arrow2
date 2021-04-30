@@ -36,7 +36,7 @@ use self::{
         cast_array_data, cast_numeric_arrays, cast_numeric_to_bool, cast_numeric_to_string,
         primitive_to_dictionary,
     },
-    string_to::{cast_string_to_numeric, string_to_dictionary, to_date32, to_date64},
+    string_to::{cast_string_to_numeric, string_to_dictionary},
 };
 
 use super::arity::unary;
@@ -45,6 +45,56 @@ mod boolean_to;
 mod dictionary_to;
 mod primitive_to;
 mod string_to;
+
+fn can_cast_to_utf8(t: &DataType) -> bool {
+    use DataType::*;
+    matches!(
+        t,
+        Int32
+            | Date32
+            | Time32(_)
+            | Interval(IntervalUnit::YearMonth)
+            | Int64
+            | Date64
+            | Time64(_)
+            | Duration(_)
+            | Timestamp(_, None)
+            | UInt8
+            | UInt16
+            | UInt32
+            | UInt64
+            | Int8
+            | Int16
+            | Float32
+            | Float64
+            | Binary
+            | LargeBinary
+    )
+}
+
+fn can_cast_from_utf8(t: &DataType) -> bool {
+    use DataType::*;
+    matches!(
+        t,
+        Int32
+            | Date32
+            | Time32(_)
+            | Interval(IntervalUnit::YearMonth)
+            | Int64
+            | Date64
+            | Time64(_)
+            | Duration(_)
+            | Timestamp(_, None)
+            | UInt8
+            | UInt16
+            | UInt32
+            | UInt64
+            | Int8
+            | Int16
+            | Float32
+            | Float64
+    )
+}
 
 /// Returns true if this type is numeric: (UInt*, Unit*, or Float*).
 fn is_numeric(t: &DataType) -> bool {
@@ -80,13 +130,12 @@ pub fn can_cast_types(from_type: &DataType, to_type: &DataType) -> bool {
         (_, Dictionary(_, value_type)) => can_cast_types(from_type, value_type),
 
         (_, Boolean) => is_numeric(from_type),
-        (Boolean, _) => is_numeric(to_type) || to_type == &Utf8,
+        (Boolean, _) => is_numeric(to_type) || to_type == &Utf8 || to_type == &LargeUtf8,
 
-        (Utf8, Date32) => true,
-        (Utf8, Date64) => true,
-        (Utf8, _) => is_numeric(to_type),
-        (LargeUtf8, _) => is_numeric(to_type),
-        (_, Utf8) => is_numeric(from_type) || from_type == &Binary,
+        (Utf8, _) => can_cast_from_utf8(to_type),
+        (LargeUtf8, _) => can_cast_from_utf8(to_type),
+        (_, Utf8) => can_cast_to_utf8(from_type),
+        (_, LargeUtf8) => can_cast_to_utf8(from_type),
 
         // start numeric casts
         (UInt8, UInt16) => true,
@@ -216,7 +265,7 @@ pub fn can_cast_types(from_type: &DataType, to_type: &DataType) -> bool {
         (Timestamp(_, _), Date64) => true,
         // date64 to timestamp might not make sense,
         (Int64, Duration(_)) => true,
-        (Null, Int32) => true,
+        (Null, _) => true,
         (_, _) => false,
     }
 }
@@ -351,6 +400,7 @@ pub fn cast(array: &dyn Array, to_type: &DataType) -> Result<Box<dyn Array>> {
             ))),
         },
 
+        // From Utf8
         (Utf8, _) => match to_type {
             UInt8 => cast_string_to_numeric::<i32, u8>(array, to_type),
             UInt16 => cast_string_to_numeric::<i32, u16>(array, to_type),
@@ -358,12 +408,16 @@ pub fn cast(array: &dyn Array, to_type: &DataType) -> Result<Box<dyn Array>> {
             UInt64 => cast_string_to_numeric::<i32, u64>(array, to_type),
             Int8 => cast_string_to_numeric::<i32, i8>(array, to_type),
             Int16 => cast_string_to_numeric::<i32, i16>(array, to_type),
-            Int32 => cast_string_to_numeric::<i32, i32>(array, to_type),
-            Int64 => cast_string_to_numeric::<i32, i64>(array, to_type),
             Float32 => cast_string_to_numeric::<i32, f32>(array, to_type),
             Float64 => cast_string_to_numeric::<i32, f64>(array, to_type),
-            Date32 => Ok(Box::new(to_date32::<i32>(array, to_type))),
-            Date64 => Ok(Box::new(to_date64::<i32>(array, to_type))),
+            Int32 | Date32 | Time32(_) | Interval(IntervalUnit::YearMonth) => {
+                let array = array.as_any().downcast_ref().unwrap();
+                Ok(Box::new(string_to::to_i32::<i32>(array, to_type)))
+            }
+            Int64 | Date64 | Time64(_) | Duration(_) | Timestamp(_, None) => {
+                let array = array.as_any().downcast_ref().unwrap();
+                Ok(Box::new(string_to::to_i64::<i32>(array, to_type)))
+            }
             _ => Err(ArrowError::NotYetImplemented(format!(
                 "Casting from {:?} to {:?} not supported",
                 from_type, to_type,
@@ -376,18 +430,23 @@ pub fn cast(array: &dyn Array, to_type: &DataType) -> Result<Box<dyn Array>> {
             UInt64 => cast_string_to_numeric::<i64, u64>(array, to_type),
             Int8 => cast_string_to_numeric::<i64, i8>(array, to_type),
             Int16 => cast_string_to_numeric::<i64, i16>(array, to_type),
-            Int32 => cast_string_to_numeric::<i64, i32>(array, to_type),
-            Int64 => cast_string_to_numeric::<i64, i64>(array, to_type),
             Float32 => cast_string_to_numeric::<i64, f32>(array, to_type),
             Float64 => cast_string_to_numeric::<i64, f64>(array, to_type),
-            Date32 => Ok(Box::new(to_date32::<i64>(array, to_type))),
-            Date64 => Ok(Box::new(to_date64::<i64>(array, to_type))),
+            Int32 | Date32 | Time32(_) | Interval(IntervalUnit::YearMonth) => {
+                let array = array.as_any().downcast_ref().unwrap();
+                Ok(Box::new(string_to::to_i32::<i64>(array, to_type)))
+            }
+            Int64 | Date64 | Time64(_) | Duration(_) | Timestamp(_, None) => {
+                let array = array.as_any().downcast_ref().unwrap();
+                Ok(Box::new(string_to::to_i64::<i64>(array, to_type)))
+            }
             _ => Err(ArrowError::NotYetImplemented(format!(
                 "Casting from {:?} to {:?} not supported",
                 from_type, to_type,
             ))),
         },
 
+        // To Utf8
         (_, Utf8) => match from_type {
             UInt8 => cast_numeric_to_string::<u8, i32>(array),
             UInt16 => cast_numeric_to_string::<u16, i32>(array),
@@ -395,8 +454,14 @@ pub fn cast(array: &dyn Array, to_type: &DataType) -> Result<Box<dyn Array>> {
             UInt64 => cast_numeric_to_string::<u64, i32>(array),
             Int8 => cast_numeric_to_string::<i8, i32>(array),
             Int16 => cast_numeric_to_string::<i16, i32>(array),
-            Int32 => cast_numeric_to_string::<i32, i32>(array),
-            Int64 => cast_numeric_to_string::<i64, i32>(array),
+            Int32 | Date32 | Time32(_) | Interval(IntervalUnit::YearMonth) => {
+                let array = array.as_any().downcast_ref().unwrap();
+                Ok(Box::new(primitive_to::i32_to_string::<i32>(array)))
+            }
+            Int64 | Date64 | Time64(_) | Duration(_) | Timestamp(_, None) => {
+                let array = array.as_any().downcast_ref().unwrap();
+                Ok(Box::new(primitive_to::i64_to_string::<i32>(array)))
+            }
             Float32 => cast_numeric_to_string::<f32, i32>(array),
             Float64 => cast_numeric_to_string::<f64, i32>(array),
             Binary => {
@@ -410,6 +475,63 @@ pub fn cast(array: &dyn Array, to_type: &DataType) -> Result<Box<dyn Array>> {
                 let array = Utf8Array::<i32>::from_trusted_len_iter(iter);
                 Ok(Box::new(array))
             }
+            LargeBinary => {
+                let array = array.as_any().downcast_ref::<BinaryArray<i64>>().unwrap();
+
+                // perf todo: the offsets are equal; we can speed-up this
+                let iter = array
+                    .iter()
+                    .map(|x| x.and_then(|x| std::str::from_utf8(x).ok()));
+
+                let array = Utf8Array::<i32>::from_trusted_len_iter(iter);
+                Ok(Box::new(array))
+            }
+
+            _ => Err(ArrowError::NotYetImplemented(format!(
+                "Casting from {:?} to {:?} not supported",
+                from_type, to_type,
+            ))),
+        },
+        (_, LargeUtf8) => match from_type {
+            UInt8 => cast_numeric_to_string::<u8, i64>(array),
+            UInt16 => cast_numeric_to_string::<u16, i64>(array),
+            UInt32 => cast_numeric_to_string::<u32, i64>(array),
+            UInt64 => cast_numeric_to_string::<u64, i64>(array),
+            Int8 => cast_numeric_to_string::<i8, i64>(array),
+            Int16 => cast_numeric_to_string::<i16, i64>(array),
+            Int32 | Date32 | Time32(_) | Interval(IntervalUnit::YearMonth) => {
+                let array = array.as_any().downcast_ref().unwrap();
+                Ok(Box::new(primitive_to::i32_to_string::<i64>(array)))
+            }
+            Int64 | Date64 | Time64(_) | Duration(_) | Timestamp(_, None) => {
+                let array = array.as_any().downcast_ref().unwrap();
+                Ok(Box::new(primitive_to::i64_to_string::<i64>(array)))
+            }
+            Float32 => cast_numeric_to_string::<f32, i64>(array),
+            Float64 => cast_numeric_to_string::<f64, i64>(array),
+            Binary => {
+                let array = array.as_any().downcast_ref::<BinaryArray<i32>>().unwrap();
+
+                // perf todo: the offsets are equal; we can speed-up this
+                let iter = array
+                    .iter()
+                    .map(|x| x.and_then(|x| std::str::from_utf8(x).ok()));
+
+                let array = Utf8Array::<i64>::from_trusted_len_iter(iter);
+                Ok(Box::new(array))
+            }
+            LargeBinary => {
+                let array = array.as_any().downcast_ref::<BinaryArray<i64>>().unwrap();
+
+                // perf todo: the offsets are equal; we can speed-up this
+                let iter = array
+                    .iter()
+                    .map(|x| x.and_then(|x| std::str::from_utf8(x).ok()));
+
+                let array = Utf8Array::<i64>::from_trusted_len_iter(iter);
+                Ok(Box::new(array))
+            }
+
             _ => Err(ArrowError::NotYetImplemented(format!(
                 "Casting from {:?} to {:?} not supported",
                 from_type, to_type,
@@ -683,8 +805,7 @@ pub fn cast(array: &dyn Array, to_type: &DataType) -> Result<Box<dyn Array>> {
         // date64 to timestamp might not make sense,
         (Int64, Duration(_)) => cast_array_data::<i64>(array, to_type),
 
-        // null to primitive/flat types
-        //(Null, Int32) => Ok(Box::new(Int32Array::from(vec![None; array.len()]))),
+        (Null, _) => Ok(new_null_array(to_type.clone(), array.len())),
         (_, _) => Err(ArrowError::NotYetImplemented(format!(
             "Casting from {:?} to {:?} not supported",
             from_type, to_type,
@@ -887,6 +1008,52 @@ mod tests {
     fn test_cast_int32_to_timestamp() {
         let array = Primitive::<i32>::from(&[Some(2), Some(10), None]).to(DataType::Int32);
         cast(&array, &DataType::Timestamp(TimeUnit::Microsecond, None)).unwrap();
+    }
+
+    /// Verify that the `can_cast` is consistent with `cast`.
+    #[test]
+    fn consistent_casts() -> Result<()> {
+        use DataType::*;
+        let data_types = vec![
+            Null,
+            Boolean,
+            UInt16,
+            Int16,
+            Int32,
+            Time32(TimeUnit::Millisecond),
+            Time32(TimeUnit::Second),
+            Time64(TimeUnit::Microsecond),
+            Time64(TimeUnit::Nanosecond),
+            Timestamp(TimeUnit::Nanosecond, None),
+            Timestamp(TimeUnit::Second, None),
+            Timestamp(TimeUnit::Millisecond, None),
+            Timestamp(TimeUnit::Microsecond, None),
+            Duration(TimeUnit::Second),
+            Int64,
+            Date32,
+            Date64,
+            Float32,
+            Float64,
+            Utf8,
+            LargeUtf8,
+            Binary,
+            LargeBinary,
+        ];
+
+        for lhs in data_types.clone() {
+            for rhs in data_types.clone() {
+                let array = new_null_array(lhs.clone(), 2);
+                if can_cast_types(&lhs, &rhs) {
+                    cast(array.as_ref(), &rhs)?;
+                } else if cast(array.as_ref(), &rhs).is_ok() {
+                    panic!(
+                        "Cast between {} and {} marked as not supported but is",
+                        lhs, rhs
+                    )
+                }
+            }
+        }
+        Ok(())
     }
 
     /*

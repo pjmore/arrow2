@@ -23,7 +23,8 @@ use crate::{
         TryFromIterator, Utf8Array,
     },
     bitmap::Bitmap,
-    datatypes::DataType,
+    datatypes::{DataType, IntervalUnit, TimeUnit},
+    temporal_conversions,
     types::NativeType,
 };
 use crate::{error::Result, util::lexical_to_string};
@@ -44,6 +45,88 @@ where
 
     Ok(Box::new(array))
 }
+
+pub fn i32_to_string<O: Offset>(array: &PrimitiveArray<i32>) -> Utf8Array<O> {
+    let converter = match array.data_type() {
+        DataType::Interval(IntervalUnit::YearMonth) | DataType::Int32 => lexical_to_string,
+        DataType::Date32 => |x| temporal_conversions::date32_to_date(x).to_string(),
+        DataType::Time32(TimeUnit::Second) => {
+            |x| temporal_conversions::time32s_to_time(x).to_string()
+        }
+        DataType::Time32(TimeUnit::Millisecond) => {
+            |x| temporal_conversions::time32ms_to_time(x).to_string()
+        }
+        _ => unreachable!(),
+    };
+
+    let iter = array.iter().map(|x| x.copied().map(converter));
+    Utf8Array::<O>::from_trusted_len_iter(iter)
+}
+
+pub fn i64_to_string<O: Offset>(array: &PrimitiveArray<i64>) -> Utf8Array<O> {
+    let converter = match array.data_type() {
+        DataType::Int64 | DataType::Duration(_) => lexical_to_string,
+        DataType::Date64 => |x| temporal_conversions::date64_to_date(x).to_string(),
+        DataType::Time64(TimeUnit::Microsecond) => {
+            |x| temporal_conversions::time64us_to_time(x).to_string()
+        }
+        DataType::Time64(TimeUnit::Nanosecond) => {
+            |x| temporal_conversions::time64ns_to_time(x).to_string()
+        }
+        DataType::Timestamp(TimeUnit::Second, None) => {
+            |x| temporal_conversions::timestamp_s_to_datetime(x).to_string()
+        }
+        DataType::Timestamp(TimeUnit::Millisecond, None) => {
+            |x| temporal_conversions::timestamp_ms_to_datetime(x).to_string()
+        }
+        DataType::Timestamp(TimeUnit::Microsecond, None) => {
+            |x| temporal_conversions::timestamp_us_to_datetime(x).to_string()
+        }
+        DataType::Timestamp(TimeUnit::Nanosecond, None) => {
+            |x| temporal_conversions::timestamp_ns_to_datetime(x).to_string()
+        }
+        _ => unreachable!(),
+    };
+
+    let iter = array.iter().map(|x| x.copied().map(converter));
+    Utf8Array::<O>::from_trusted_len_iter(iter)
+}
+
+/*
+
+impl std::fmt::Display for PrimitiveArray<i128> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self.data_type() {
+            DataType::Decimal(_, scale) => {
+                let new_lines = false;
+                let head = &format!("{}", self.data_type());
+                // The number 999.99 has a precision of 5 and scale of 2
+                let iter = self.iter().map(|x| {
+                    x.copied().map(|x| {
+                        let base = x / 10i128.pow(*scale as u32);
+                        let decimals = x - base * 10i128.pow(*scale as u32);
+                        format!("{}.{}", base, decimals)
+                    })
+                });
+                display_fmt(iter, head, f, new_lines)
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+impl std::fmt::Display for PrimitiveArray<days_ms> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let new_lines = false;
+        let head = &format!("{}", self.data_type());
+        let iter = self.iter().map(|x| {
+            x.copied()
+                .map(|x| format!("{}d{}ms", x.days(), x.milliseconds()))
+        });
+        display_fmt(iter, head, f, new_lines)
+    }
+}
+*/
 
 /// Convert Array into a PrimitiveArray of type, and apply numeric cast
 pub fn cast_numeric_arrays<I, O>(from: &dyn Array, to_type: &DataType) -> Result<Box<dyn Array>>
