@@ -67,7 +67,7 @@ doc-comment = "0.3"
 crossbeam-channel = "0.5.1"
 
 [features]
-default = ["io_csv", "io_json", "io_ipc", "io_json_integration", "io_print", "io_parquet", "regex", "merge_sort", "ahash", "benchmarks"]
+default = ["io_print" , "merge_sort", "ahash"]
 merge_sort = ["itertools"]
 io_csv = ["csv", "lazy_static", "regex"]
 io_json = ["serde", "serde_derive", "serde_json", "indexmap"]
@@ -89,50 +89,51 @@ skip_feature_sets = [
 
 skip_optional_dependencies = true
 
-[[bench]]
-name = "take_kernels"
-harness = false
-
-[[bench]]
-name = "filter_kernels"
-harness = false
-
-[[bench]]
-name = "cast_kernels"
-harness = false
-
-[[bench]]
-name = "sort_kernel"
-harness = false
-
-[[bench]]
-name = "length_kernel"
-harness = false
-
-[[bench]]
-name = "null_count"
-harness = false
-
-[[bench]]
-name = "from_trusted_len_iter"
-harness = false
-
-[[bench]]
-name = "growable"
-harness = false
-
-[[bench]]
-name = "comparison_kernels"
-harness = false
-
-[[bench]]
-name = "read_parquet"
-harness = false
-
-[[bench]]
-name = "write_parquet"
-harness = false
-
-[[bench]]
-name = "aggregate"
-harness = false
+#[[bench]]
+#name = "take_kernels"
+#harness = false
+#
+#[[bench]]
+#name = "filter_kernels"
+#harness = false
+#
+#[[bench]]
+#name = "cast_kernels"
+#harness = false
+#
+#[[bench]]
+#name = "sort_kernel"
+#harness = false
+#
+#[[bench]]
+#name = "length_kernel"
+#harness = false
+#
+#[[bench]]
+#name = "null_count"
+#harness = false
+#
+#[[bench]]
+#name = "from_trusted_len_iter"
+#harness = false
+#
+#[[bench]]
+#name = "growable"
+#harness = false
+#
+#[[bench]]
+#name = "comparison_kernels"
+#harness = false
+#
+#[[bench]]
+#name = "read_parquet"
+#harness = false
+#
+#[[bench]]
+#name = "write_parquet"
+#harness = false
+#
+#[[bench]]
+#name = "aggregate"
+#harness = false
+#

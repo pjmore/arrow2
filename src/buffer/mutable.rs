@@ -32,6 +32,7 @@ fn capacity_multiple_of_64<T: NativeType>(capacity: usize) -> usize {
 /// let buffer: Buffer<u32> = buffer.into();
 /// assert_eq!(buffer.as_slice(), &[256, 1])
 /// ```
+#[repr(C)]
 #[derive(Debug)]
 pub struct MutableBuffer<T: NativeType> {
     // dangling iff capacity = 0
