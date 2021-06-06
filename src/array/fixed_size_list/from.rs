@@ -1,5 +1,5 @@
-use std::{iter::FromIterator, sync::Arc};
-
+use core::iter::FromIterator;
+use alloc::sync::Arc;
 use crate::{
     array::{Array, Builder, ToArray, TryFromIterator},
     bitmap::MutableBitmap,
@@ -13,7 +13,7 @@ use super::FixedSizeListArray;
 pub struct FixedSizeListPrimitive<B: Builder<T>, T> {
     values: B,
     validity: MutableBitmap,
-    phantom: std::marker::PhantomData<T>,
+    phantom: core::marker::PhantomData<T>,
 }
 
 impl<B: Builder<T>, T> FixedSizeListPrimitive<B, T> {
@@ -25,7 +25,7 @@ impl<B: Builder<T>, T> FixedSizeListPrimitive<B, T> {
         Self {
             values: B::with_capacity(values_capacity),
             validity: MutableBitmap::with_capacity(capacity),
-            phantom: std::marker::PhantomData,
+            phantom: core::marker::PhantomData,
         }
     }
 }

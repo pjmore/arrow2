@@ -56,7 +56,7 @@ pub fn read_metadata<R: Read + Seek>(reader: &mut R) -> Result<FileMetaData> {
     Ok(_read_metadata(reader)?)
 }
 
-fn page_iter_i64<I: StreamingIterator<Item = std::result::Result<Page, ParquetError>>>(
+fn page_iter_i64<I: StreamingIterator<Item = core::result::Result<Page, ParquetError>>>(
     iter: I,
     metadata: &ColumnChunkMetaData,
     converted_type: &Option<PrimitiveConvertedType>,
@@ -72,7 +72,7 @@ fn page_iter_i64<I: StreamingIterator<Item = std::result::Result<Page, ParquetEr
     }
 }
 
-fn page_iter_i32<I: StreamingIterator<Item = std::result::Result<Page, ParquetError>>>(
+fn page_iter_i32<I: StreamingIterator<Item = core::result::Result<Page, ParquetError>>>(
     iter: I,
     metadata: &ColumnChunkMetaData,
     converted_type: &Option<PrimitiveConvertedType>,
@@ -97,7 +97,7 @@ fn page_iter_i32<I: StreamingIterator<Item = std::result::Result<Page, ParquetEr
     }
 }
 
-fn page_iter_byte_array<I: StreamingIterator<Item = std::result::Result<Page, ParquetError>>>(
+fn page_iter_byte_array<I: StreamingIterator<Item = core::result::Result<Page, ParquetError>>>(
     iter: I,
     metadata: &ColumnChunkMetaData,
     converted_type: &Option<PrimitiveConvertedType>,
@@ -121,7 +121,7 @@ fn page_iter_byte_array<I: StreamingIterator<Item = std::result::Result<Page, Pa
 }
 
 fn page_iter_fixed_len_byte_array<
-    I: StreamingIterator<Item = std::result::Result<Page, ParquetError>>,
+    I: StreamingIterator<Item = core::result::Result<Page, ParquetError>>,
 >(
     iter: I,
     length: &i32,
@@ -143,7 +143,7 @@ fn page_iter_fixed_len_byte_array<
     })
 }
 
-pub fn page_iter_to_array<I: StreamingIterator<Item = std::result::Result<Page, ParquetError>>>(
+pub fn page_iter_to_array<I: StreamingIterator<Item = core::result::Result<Page, ParquetError>>>(
     iter: &mut I,
     metadata: &ColumnChunkMetaData,
 ) -> Result<Box<dyn Array>> {
@@ -314,7 +314,7 @@ mod tests {
 #[cfg(test)]
 mod tests_integration {
     use super::*;
-    use std::sync::Arc;
+    use alloc::sync::Arc;
 
     #[test]
     fn all_types() -> Result<()> {

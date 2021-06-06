@@ -1,4 +1,5 @@
-use std::{iter::FromIterator, sync::Arc};
+use core::iter::FromIterator;
+use alloc::sync::Arc;
 
 use super::FixedSizeBinaryArray;
 use crate::array::{Array, Builder, ToArray, TryFromIterator};
@@ -114,7 +115,7 @@ impl ToArray for FixedSizeBinaryPrimitive {
 
 #[cfg(test)]
 mod tests {
-    use std::iter::FromIterator;
+    use core::iter::FromIterator;
 
     use super::*;
 

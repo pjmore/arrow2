@@ -15,7 +15,7 @@ enum State {
 /// For example, the bitmap `00101111` returns `[(0,4), (6,1)]`
 #[derive(Debug, Clone)]
 pub struct SlicesIterator<'a> {
-    values: std::slice::Iter<'a, u8>,
+    values: core::slice::Iter<'a, u8>,
     count: usize,
     mask: u8,
     max_len: usize,
@@ -156,6 +156,7 @@ impl<'a> Iterator for SlicesIterator<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use alloc::vec::Vec;
 
     #[test]
     fn check_invariant() {

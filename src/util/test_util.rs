@@ -16,7 +16,11 @@
 // under the License.
 
 //! Utils to make testing easier
+use alloc::string::String;
+use alloc::boxed::Box;
+use crate::error::Error;
 
+//TODO: std feature
 use std::{env, error::Error, path::PathBuf};
 
 /// Returns the arrow test data directory, which is by default stored

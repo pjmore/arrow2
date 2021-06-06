@@ -55,12 +55,14 @@
 //!
 //! To serialize slices, e.g. for checkpointing or transfer via Arrow's IPC, you can store
 //! them as 3 non-null primitive arrays (e.g. `PrimitiveArray<i64>`).
+use alloc::vec::Vec;
 
-use std::iter::once;
-use std::{cmp::Ordering, collections::HashMap};
+use core::iter::once;
+use core::cmp::Ordering;
+use hashbrown::HashMap;
 
 use itertools::Itertools;
-
+use alloc::boxed::Box;
 use crate::array::{
     growable::make_growable,
     ord::{build_compare, DynComparator},

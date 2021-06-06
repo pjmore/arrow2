@@ -16,7 +16,7 @@
 // under the License.
 
 use std::io::Read;
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::array::*;
 use crate::datatypes::Schema;

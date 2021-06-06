@@ -32,7 +32,7 @@
 
 use crate::array::{growable::make_growable, Array};
 use crate::error::{ArrowError, Result};
-
+use alloc::boxed::Box;
 /// Concatenate multiple [Array] of the same type into a single [ArrayRef].
 pub fn concatenate(arrays: &[&dyn Array]) -> Result<Box<dyn Array>> {
     if arrays.is_empty() {
@@ -49,6 +49,7 @@ pub fn concatenate(arrays: &[&dyn Array]) -> Result<Box<dyn Array>> {
             "It is not possible to concatenate arrays of different data types.".to_string(),
         ));
     }
+    use alloc::vec::Vec;
 
     let lengths = arrays.iter().map(|array| array.len()).collect::<Vec<_>>();
     let capacity = lengths.iter().sum();

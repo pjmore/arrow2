@@ -3,7 +3,7 @@ use crate::trusted_len::TrustedLen;
 /// An iterator over bits according to the [LSB](https://en.wikipedia.org/wiki/Bit_numbering#Least_significant_bit),
 /// i.e. the bytes `[4u8, 128u8]` correspond to `[false, false, true, false, ..., true]`.
 pub struct BitmapIter<'a> {
-    iter: std::slice::Iter<'a, u8>,
+    iter: core::slice::Iter<'a, u8>,
     current_byte: &'a u8,
     len: usize,
     index: usize,
@@ -83,6 +83,7 @@ unsafe impl TrustedLen for BitmapIter<'_> {}
 #[cfg(test)]
 mod tests {
     use super::*;
+    use alloc::vec::Vec;
 
     #[test]
     fn basic() {
@@ -95,7 +96,7 @@ mod tests {
     #[test]
     fn large() {
         let values = &[0b01011011u8];
-        let values = std::iter::repeat(values)
+        let values = core::iter::repeat(values)
             .take(63)
             .flatten()
             .copied()

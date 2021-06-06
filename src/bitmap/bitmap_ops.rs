@@ -1,4 +1,4 @@
-use std::ops::{BitAnd, BitOr, Not};
+use core::ops::{BitAnd, BitOr, Not};
 
 use crate::buffer::MutableBuffer;
 

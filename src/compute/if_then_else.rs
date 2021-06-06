@@ -1,7 +1,7 @@
 use crate::array::growable;
 use crate::error::{ArrowError, Result};
 use crate::{array::*, bitmap::utils::SlicesIterator};
-
+use alloc::boxed::Box;
 /// Returns the values from `lhs` if the predicate is `true` or from the `lhs` if the predicate is false
 /// Returns `None` if the predicate is `None`.
 /// # Example

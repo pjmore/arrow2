@@ -5,15 +5,16 @@ use crate::{
 };
 
 use crate::error::Result;
+use alloc::vec::Vec;
 
 use super::PrimitiveArray;
 
 unsafe impl<T: NativeType> ToFfi for PrimitiveArray<T> {
-    fn buffers(&self) -> Vec<Option<std::ptr::NonNull<u8>>> {
+    fn buffers(&self) -> Vec<Option<core::ptr::NonNull<u8>>> {
         unsafe {
             vec![
                 self.validity.as_ref().map(|x| x.as_ptr()),
-                Some(std::ptr::NonNull::new_unchecked(
+                Some(core::ptr::NonNull::new_unchecked(
                     self.values.as_ptr() as *mut u8
                 )),
             ]

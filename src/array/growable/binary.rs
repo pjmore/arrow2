@@ -1,11 +1,12 @@
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::{
     array::{Array, BinaryArray, Offset},
     bitmap::MutableBitmap,
     buffer::MutableBuffer,
 };
-
+use alloc::vec::Vec;
+use alloc::boxed::Box;
 use super::{
     utils::{build_extend_null_bits, extend_offset_values, extend_offsets, ExtendNullBits},
     Growable,
@@ -58,9 +59,9 @@ impl<'a, O: Offset> GrowableBinary<'a, O> {
     }
 
     fn to(&mut self) -> BinaryArray<O> {
-        let validity = std::mem::take(&mut self.validity);
-        let offsets = std::mem::take(&mut self.offsets);
-        let values = std::mem::take(&mut self.values);
+        let validity = core::mem::take(&mut self.validity);
+        let offsets = core::mem::take(&mut self.offsets);
+        let values = core::mem::take(&mut self.values);
 
         BinaryArray::<O>::from_data(offsets.into(), values.into(), validity.into())
     }
@@ -105,7 +106,7 @@ impl<'a, O: Offset> From<GrowableBinary<'a, O>> for BinaryArray<O> {
 
 #[cfg(test)]
 mod tests {
-    use std::iter::FromIterator;
+    use core::iter::FromIterator;
 
     use super::*;
 

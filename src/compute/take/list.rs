@@ -14,6 +14,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+use alloc::vec::Vec;
 
 use crate::{
     array::{
@@ -75,7 +76,7 @@ mod tests {
         buffer::Buffer,
         datatypes::DataType,
     };
-    use std::sync::Arc;
+    use alloc::sync::Arc;
 
     #[test]
     fn list_with_no_none() {

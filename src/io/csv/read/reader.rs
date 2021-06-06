@@ -88,7 +88,7 @@ pub fn infer(string: &str) -> DataType {
 
 #[cfg(test)]
 mod tests {
-    use std::sync::Arc;
+    use alloc::sync::Arc;
 
     use super::super::{deserialize_batch, deserialize_column, infer_schema, ReaderBuilder};
     use super::*;

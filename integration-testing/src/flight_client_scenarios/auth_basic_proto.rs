@@ -25,7 +25,7 @@ use prost::Message;
 use tonic::{metadata::MetadataValue, Request, Status};
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
-type Result<T = (), E = Error> = std::result::Result<T, E>;
+type Result<T = (), E = Error> = core::result::Result<T, E>;
 
 type Client = FlightServiceClient<tonic::transport::Channel>;
 

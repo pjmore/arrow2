@@ -22,6 +22,7 @@ use crate::{
     datatypes::DataType,
     error::{ArrowError, Result},
 };
+use alloc::boxed::Box;
 
 fn utf8_substring<O: Offset>(array: &Utf8Array<O>, start: O, length: &Option<O>) -> Utf8Array<O> {
     let validity = array.validity();

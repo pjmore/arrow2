@@ -75,7 +75,7 @@ a trait object. This enables arrays to have types that are dynamic in nature.
 `ListArray<i32>` is an example of a nested (dynamic) array:
 
 ```rust
-# use std::sync::Arc;
+# use alloc::sync::Arc;
 # use arrow2::array::{Array, ListPrimitive, ListArray, Primitive};
 # use arrow2::datatypes::DataType;
 # fn main() {

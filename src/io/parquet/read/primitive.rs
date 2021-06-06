@@ -20,18 +20,18 @@ use crate::{
 };
 
 struct ExactChunksIter<'a, T: NativeType> {
-    chunks: std::slice::ChunksExact<'a, u8>,
-    phantom: std::marker::PhantomData<T>,
+    chunks: core::slice::ChunksExact<'a, u8>,
+    phantom: core::marker::PhantomData<T>,
 }
 
 impl<'a, T: NativeType> ExactChunksIter<'a, T> {
     #[inline]
     pub fn new(slice: &'a [u8]) -> Self {
-        assert_eq!(slice.len() % std::mem::size_of::<T>(), 0);
-        let chunks = slice.chunks_exact(std::mem::size_of::<T>());
+        assert_eq!(slice.len() % core::mem::size_of::<T>(), 0);
+        let chunks = slice.chunks_exact(core::mem::size_of::<T>());
         Self {
             chunks,
-            phantom: std::marker::PhantomData,
+            phantom: core::marker::PhantomData,
         }
     }
 }
@@ -90,7 +90,7 @@ fn read_dict_buffer_optional<T, A, F>(
         match run {
             hybrid_rle::HybridEncoded::Bitpacked(packed) => {
                 let remaining = length - values.len();
-                let len = std::cmp::min(packed.len() * 8, remaining);
+                let len = core::cmp::min(packed.len() * 8, remaining);
                 for is_valid in BitmapIter::new(packed, 0, len) {
                     validity.push(is_valid);
                     let value = if is_valid {
@@ -141,7 +141,7 @@ fn read_nullable<T, A, F>(
             hybrid_rle::HybridEncoded::Bitpacked(packed) => {
                 // the pack may contain more items than needed.
                 let remaining = length - values.len();
-                let len = std::cmp::min(packed.len() * 8, remaining);
+                let len = core::cmp::min(packed.len() * 8, remaining);
                 for is_valid in BitmapIter::new(packed, 0, len) {
                     validity.push(is_valid);
                     let value = if is_valid {
@@ -176,7 +176,7 @@ where
 {
     assert_eq!(
         values_buffer.len(),
-        length as usize * std::mem::size_of::<T>()
+        length as usize * core::mem::size_of::<T>()
     );
     let iterator = ExactChunksIter::<T>::new(values_buffer);
 
@@ -197,7 +197,7 @@ where
     E: Clone,
     A: ArrowNativeType,
     F: Copy + Fn(T) -> A,
-    I: StreamingIterator<Item = std::result::Result<Page, E>>,
+    I: StreamingIterator<Item = core::result::Result<Page, E>>,
 {
     let capacity = metadata.num_values() as usize;
     let mut values = MutableBuffer::<A>::with_capacity(capacity);

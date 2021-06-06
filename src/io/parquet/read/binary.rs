@@ -15,7 +15,7 @@ where
     ArrowError: From<E>,
     O: Offset,
     E: Clone,
-    I: StreamingIterator<Item = std::result::Result<Page, E>>,
+    I: StreamingIterator<Item = core::result::Result<Page, E>>,
 {
     let capacity = metadata.num_values() as usize;
     let mut values = MutableBuffer::<u8>::with_capacity(0);

@@ -104,8 +104,8 @@ fn build_statistics<O: Offset>(
 
 /// Returns the ordering of two binary values. This corresponds to pyarrows' ordering
 /// of statistics.
-pub(crate) fn ord_binary<'a>(a: &'a [u8], b: &'a [u8]) -> std::cmp::Ordering {
-    use std::cmp::Ordering::*;
+pub(crate) fn ord_binary<'a>(a: &'a [u8], b: &'a [u8]) -> core::cmp::Ordering {
+    use core::cmp::Ordering::*;
     match (a.is_empty(), b.is_empty()) {
         (true, true) => return Equal,
         (true, false) => return Less,

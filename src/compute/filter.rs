@@ -26,6 +26,8 @@ use crate::{
     bitmap::{utils::SlicesIterator, MutableBitmap},
     types::days_ms,
 };
+use alloc::vec::Vec;
+use alloc::boxed::Box;
 use crate::{buffer::MutableBuffer, error::Result};
 
 /// Function that can filter arbitrary arrays

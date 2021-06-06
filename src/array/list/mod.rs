@@ -1,11 +1,11 @@
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::{
     bitmap::Bitmap,
     buffer::Buffer,
     datatypes::{DataType, Field},
 };
-
+use alloc::boxed::Box;
 use super::{
     display_fmt, new_empty_array,
     specification::{check_offsets, Offset},
@@ -152,7 +152,7 @@ impl<O: Offset> ListArray<O> {
 
 impl<O: Offset> Array for ListArray<O> {
     #[inline]
-    fn as_any(&self) -> &dyn std::any::Any {
+    fn as_any(&self) -> &dyn core::any::Any {
         self
     }
 
@@ -176,8 +176,8 @@ impl<O: Offset> Array for ListArray<O> {
     }
 }
 
-impl<O: Offset> std::fmt::Display for ListArray<O> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl<O: Offset> core::fmt::Display for ListArray<O> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let head = if O::is_large() {
             "LargeListArray"
         } else {

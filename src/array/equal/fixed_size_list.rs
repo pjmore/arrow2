@@ -3,6 +3,7 @@ use crate::{
     array::{Array, FixedSizeListArray},
     bitmap::Bitmap,
 };
+use alloc::vec::Vec;
 
 use super::{
     equal_range,
@@ -86,7 +87,7 @@ mod tests {
             .map(|x| {
                 Some(match x {
                     Some(x) => x.as_ref().iter().map(|x| Some(*x)).collect::<Vec<_>>(),
-                    None => std::iter::repeat(None).take(3).collect::<Vec<_>>(),
+                    None => core::iter::repeat(None).take(3).collect::<Vec<_>>(),
                 })
             })
             .collect::<FixedSizeListPrimitive<Primitive<i32>, i32>>();

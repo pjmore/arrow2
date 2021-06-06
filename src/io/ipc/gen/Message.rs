@@ -63,8 +63,8 @@ impl CompressionType {
         }
     }
 }
-impl std::fmt::Debug for CompressionType {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for CompressionType {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -160,8 +160,8 @@ impl BodyCompressionMethod {
         }
     }
 }
-impl std::fmt::Debug for BodyCompressionMethod {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for BodyCompressionMethod {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -278,8 +278,8 @@ impl MessageHeader {
         }
     }
 }
-impl std::fmt::Debug for MessageHeader {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for MessageHeader {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -343,8 +343,8 @@ impl flatbuffers::SimpleToVerifyInSlice for MessageHeader {}
 #[repr(transparent)]
 #[derive(Clone, Copy, PartialEq)]
 pub struct FieldNode(pub [u8; 16]);
-impl std::fmt::Debug for FieldNode {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for FieldNode {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("FieldNode")
             .field("length", &self.length())
             .field("null_count", &self.null_count())
@@ -373,7 +373,7 @@ impl<'b> flatbuffers::Push for FieldNode {
     #[inline]
     fn push(&self, dst: &mut [u8], _rest: &[u8]) {
         let src = unsafe {
-            ::std::slice::from_raw_parts(self as *const FieldNode as *const u8, Self::size())
+            ::core::slice::from_raw_parts(self as *const FieldNode as *const u8, Self::size())
         };
         dst.copy_from_slice(src);
     }
@@ -384,7 +384,7 @@ impl<'b> flatbuffers::Push for &'b FieldNode {
     #[inline]
     fn push(&self, dst: &mut [u8], _rest: &[u8]) {
         let src = unsafe {
-            ::std::slice::from_raw_parts(*self as *const FieldNode as *const u8, Self::size())
+            ::core::slice::from_raw_parts(*self as *const FieldNode as *const u8, Self::size())
         };
         dst.copy_from_slice(src);
     }
@@ -584,8 +584,8 @@ impl<'a: 'b, 'b> BodyCompressionBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for BodyCompression<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for BodyCompression<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("BodyCompression");
         ds.field("codec", &self.codec());
         ds.field("method", &self.method());
@@ -773,8 +773,8 @@ impl<'a: 'b, 'b> RecordBatchBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for RecordBatch<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for RecordBatch<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("RecordBatch");
         ds.field("length", &self.length());
         ds.field("nodes", &self.nodes());
@@ -922,8 +922,8 @@ impl<'a: 'b, 'b> DictionaryBatchBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for DictionaryBatch<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for DictionaryBatch<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("DictionaryBatch");
         ds.field("id", &self.id());
         ds.field("data", &self.data());
@@ -1187,8 +1187,8 @@ impl<'a: 'b, 'b> MessageBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Message<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Message<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Message");
         ds.field("version", &self.version());
         ds.field("header_type", &self.header_type());

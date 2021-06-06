@@ -1,4 +1,4 @@
-use std::iter::FromIterator;
+use core::iter::FromIterator;
 
 use crate::{
     array::TryFromIterator,
@@ -33,7 +33,7 @@ impl BooleanArray {
     #[inline]
     pub unsafe fn from_trusted_len_iter_unchecked<I, P>(iterator: I) -> Self
     where
-        P: std::borrow::Borrow<bool>,
+        P: core::borrow::Borrow<bool>,
         I: Iterator<Item = Option<P>>,
     {
         let (validity, values) = trusted_len_unzip(iterator);
@@ -45,7 +45,7 @@ impl BooleanArray {
     #[inline]
     pub fn from_trusted_len_iter<I, P>(iterator: I) -> Self
     where
-        P: std::borrow::Borrow<bool>,
+        P: core::borrow::Borrow<bool>,
         I: TrustedLen<Item = Option<P>>,
     {
         let (validity, values) = unsafe { trusted_len_unzip(iterator) };
@@ -60,7 +60,7 @@ impl BooleanArray {
     #[inline]
     pub unsafe fn try_from_trusted_len_iter_unchecked<E, I, P>(iterator: I) -> Result<Self, E>
     where
-        P: std::borrow::Borrow<bool>,
+        P: core::borrow::Borrow<bool>,
         I: Iterator<Item = Result<Option<P>, E>>,
     {
         let (validity, values) = try_trusted_len_unzip(iterator)?;
@@ -71,7 +71,7 @@ impl BooleanArray {
     #[inline]
     pub fn try_from_trusted_len_iter<E, I, P>(iterator: I) -> Result<Self, E>
     where
-        P: std::borrow::Borrow<bool>,
+        P: core::borrow::Borrow<bool>,
         I: TrustedLen<Item = Result<Option<P>, E>>,
     {
         let (validity, values) = unsafe { try_trusted_len_unzip(iterator)? };
@@ -88,7 +88,7 @@ impl BooleanArray {
 #[inline]
 pub(crate) unsafe fn trusted_len_unzip<I, P>(iterator: I) -> (Option<Bitmap>, Bitmap)
 where
-    P: std::borrow::Borrow<bool>,
+    P: core::borrow::Borrow<bool>,
     I: Iterator<Item = Option<P>>,
 {
     let (_, upper) = iterator.size_hint();
@@ -122,7 +122,7 @@ pub(crate) unsafe fn try_trusted_len_unzip<E, I, P>(
     iterator: I,
 ) -> Result<(Option<Bitmap>, Bitmap), E>
 where
-    P: std::borrow::Borrow<bool>,
+    P: core::borrow::Borrow<bool>,
     I: Iterator<Item = Result<Option<P>, E>>,
 {
     let (_, upper) = iterator.size_hint();
@@ -152,7 +152,7 @@ where
     Ok((null.into(), values.into()))
 }
 
-impl<Ptr: std::borrow::Borrow<Option<bool>>> FromIterator<Ptr> for BooleanArray {
+impl<Ptr: core::borrow::Borrow<Option<bool>>> FromIterator<Ptr> for BooleanArray {
     fn from_iter<I: IntoIterator<Item = Ptr>>(iter: I) -> Self {
         let iter = iter.into_iter();
         let (lower, _) = iter.size_hint();
@@ -175,7 +175,7 @@ impl<Ptr: std::borrow::Borrow<Option<bool>>> FromIterator<Ptr> for BooleanArray 
     }
 }
 
-impl<Ptr: std::borrow::Borrow<Option<bool>>> TryFromIterator<Ptr> for BooleanArray {
+impl<Ptr: core::borrow::Borrow<Option<bool>>> TryFromIterator<Ptr> for BooleanArray {
     fn try_from_iter<I: IntoIterator<Item = ArrowResult<Ptr>>>(iter: I) -> ArrowResult<Self> {
         let iter = iter.into_iter();
         let (lower, _) = iter.size_hint();
@@ -206,7 +206,7 @@ mod tests {
 
     #[test]
     fn from_trusted_len_iter() -> Result<()> {
-        let iter = std::iter::repeat(true).take(2).map(Some);
+        let iter = core::iter::repeat(true).take(2).map(Some);
         let a = BooleanArray::from_trusted_len_iter(iter);
         assert_eq!(a.len(), 2);
         Ok(())
@@ -214,7 +214,7 @@ mod tests {
 
     #[test]
     fn try_from_iter() -> Result<()> {
-        let iter = std::iter::repeat(true).take(2).map(Some).map(Ok);
+        let iter = core::iter::repeat(true).take(2).map(Some).map(Ok);
         let a = BooleanArray::try_from_iter(iter)?;
         assert_eq!(a.len(), 2);
         Ok(())

@@ -219,7 +219,7 @@ mod tests {
 /// Round-trip with parquet using the same integration files used for IPC integration tests.
 #[cfg(test)]
 mod tests_integration {
-    use std::sync::Arc;
+    use alloc::sync::Arc;
 
     use super::write::CompressionCodec;
     use crate::datatypes::*;
@@ -246,7 +246,7 @@ mod tests_integration {
                 .iter()
                 .zip(descritors.clone())
                 .map(|(array, type_)| {
-                    Ok(std::iter::once(array_to_page(
+                    Ok(core::iter::once(array_to_page(
                         array.as_ref(),
                         type_,
                         options,

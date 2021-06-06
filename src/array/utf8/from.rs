@@ -1,5 +1,5 @@
-use std::{iter::FromIterator, sync::Arc};
-
+use core::iter::FromIterator;
+use alloc::sync::Arc;
 use crate::{
     array::{Array, Builder, IntoArray, Offset, ToArray, TryFromIterator},
     bitmap::{Bitmap, MutableBitmap},
@@ -107,7 +107,7 @@ where
 
     let mut length = O::default();
     let mut dst = offsets.as_mut_ptr();
-    std::ptr::write(dst, length);
+    core::ptr::write(dst, length);
     dst = dst.add(1);
     for item in iterator {
         if let Some(item) = item {
@@ -120,7 +120,7 @@ where
             values.extend_from_slice(b"");
         };
 
-        std::ptr::write(dst, length);
+        core::ptr::write(dst, length);
         dst = dst.add(1);
     }
     assert_eq!(
@@ -152,14 +152,14 @@ where
 
     let mut length = O::default();
     let mut dst = offsets.as_mut_ptr();
-    std::ptr::write(dst, length);
+    core::ptr::write(dst, length);
     dst = dst.add(1);
     for item in iterator {
         let s = item.as_ref();
         length += O::from_usize(s.len()).unwrap();
         values.extend_from_slice(s.as_bytes());
 
-        std::ptr::write(dst, length);
+        core::ptr::write(dst, length);
         dst = dst.add(1);
     }
     assert_eq!(
@@ -193,7 +193,7 @@ where
 
     let mut length = O::default();
     let mut dst = offsets.as_mut_ptr();
-    std::ptr::write(dst, length);
+    core::ptr::write(dst, length);
     dst = dst.add(1);
     for item in iterator {
         if let Some(item) = item? {
@@ -204,7 +204,7 @@ where
         } else {
             null.push(false);
         };
-        std::ptr::write(dst, length);
+        core::ptr::write(dst, length);
         dst = dst.add(1);
     }
     assert_eq!(

@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use std::hash::Hasher;
+use core::hash::Hasher;
 use std::{collections::hash_map::DefaultHasher, sync::Arc};
 
 use hash_hasher::HashedMap;

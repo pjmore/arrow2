@@ -13,10 +13,12 @@
 //! All the arrays implement the trait [`Array`] and are often trait objects via [`Array::as_any`].
 //! Every array has a [`DataType`], which you can access with [`Array::data_type`].
 //! This can be used to `downcast_ref` a `&dyn Array` to concrete structs.
-//! Arrays share memory regions via [`std::sync::Arc`] and can be cloned and sliced at no cost (`O(1)`).
-use std::any::Any;
-use std::fmt::Display;
-
+//! Arrays share memory regions via [`alloc::sync::Arc`] and can be cloned and sliced at no cost (`O(1)`).
+use core::any::Any;
+use core::fmt::Display;
+use alloc::vec::Vec;
+use alloc::string::String;
+use alloc::boxed::Box;
 use crate::error::Result;
 use crate::types::days_ms;
 use crate::{
@@ -26,7 +28,7 @@ use crate::{
 
 /// A trait representing an Arrow array. Arrow arrays are trait objects
 /// that are infalibly downcasted to concrete types according to the `Array::data_type`.
-pub trait Array: std::fmt::Debug + Send + Sync + ToFfi {
+pub trait Array: core::fmt::Debug + Send + Sync + ToFfi {
     fn as_any(&self) -> &dyn Any;
 
     /// The length of the [`Array`]. Every array has a length corresponding to the number of
@@ -102,7 +104,7 @@ macro_rules! fmt_dyn {
 }
 
 impl Display for dyn Array {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self.data_type() {
             DataType::Null => fmt_dyn!(self, NullArray, f),
             DataType::Boolean => fmt_dyn!(self, BooleanArray, f),
@@ -383,13 +385,13 @@ pub type UInt64Array = PrimitiveArray<u64>;
 
 /// A trait describing the ability of a struct to convert itself to a Arc'ed [`Array`].
 pub trait ToArray {
-    fn to_arc(self, data_type: &DataType) -> std::sync::Arc<dyn Array>;
+    fn to_arc(self, data_type: &DataType) -> alloc::sync::Arc<dyn Array>;
 }
 
 /// A trait describing the ability of a struct to convert itself to a Arc'ed [`Array`],
 /// with its [`DataType`] automatically deducted.
 pub trait IntoArray {
-    fn into_arc(self) -> std::sync::Arc<dyn Array>;
+    fn into_arc(self) -> alloc::sync::Arc<dyn Array>;
 }
 
 /// A trait describing the ability of a struct to create itself from a falible iterator.
@@ -417,7 +419,7 @@ pub trait Builder<T>: TryFromIterator<Option<T>> {
     }
 }
 
-fn display_helper<T: std::fmt::Display, I: IntoIterator<Item = Option<T>>>(iter: I) -> Vec<String> {
+fn display_helper<T: core::fmt::Display, I: IntoIterator<Item = Option<T>>>(iter: I) -> Vec<String> {
     let iterator = iter.into_iter();
     let len = iterator.size_hint().0;
     if len <= 100 {
@@ -446,12 +448,12 @@ fn display_helper<T: std::fmt::Display, I: IntoIterator<Item = Option<T>>>(iter:
     }
 }
 
-fn display_fmt<T: std::fmt::Display, I: IntoIterator<Item = Option<T>>>(
+fn display_fmt<T: core::fmt::Display, I: IntoIterator<Item = Option<T>>>(
     iter: I,
     head: &str,
-    f: &mut std::fmt::Formatter<'_>,
+    f: &mut core::fmt::Formatter<'_>,
     new_lines: bool,
-) -> std::fmt::Result {
+) -> core::fmt::Result {
     let result = display_helper(iter);
     if new_lines {
         write!(f, "{}[\n{}\n]", head, result.join(",\n"))

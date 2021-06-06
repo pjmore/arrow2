@@ -1,4 +1,4 @@
-use std::convert::TryFrom;
+use core::convert::TryFrom;
 
 use num::Num;
 
@@ -12,7 +12,7 @@ use crate::{
 /// # Safety
 /// Do not implement.
 pub unsafe trait Offset:
-    NativeType + NaturalDataType + Num + Ord + std::ops::AddAssign + num::CheckedAdd
+    NativeType + NaturalDataType + Num + Ord + core::ops::AddAssign + num::CheckedAdd
 {
     fn is_large() -> bool;
 
@@ -88,8 +88,8 @@ pub fn check_offsets_and_utf8<O: Offset>(offsets: &Buffer<O>, values: &Buffer<u8
             .to_usize()
             .expect("The last offset of the array is larger than usize::MAX");
         assert!(end <= values.len());
-        let slice = unsafe { std::slice::from_raw_parts(values.as_ptr().add(start), end - start) };
-        std::str::from_utf8(slice).expect("A non-utf8 string was passed.");
+        let slice = unsafe { core::slice::from_raw_parts(values.as_ptr().add(start), end - start) };
+        core::str::from_utf8(slice).expect("A non-utf8 string was passed.");
     });
     len
 }

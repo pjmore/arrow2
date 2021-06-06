@@ -17,8 +17,8 @@
 
 //! Defines sort kernel for `ArrayRef`
 
-use std::cmp::{Ordering, Reverse};
-
+use core::cmp::{Ordering, Reverse};
+use alloc::boxed::Box;
 use crate::array::ord;
 use crate::compute::take;
 use crate::datatypes::*;
@@ -28,6 +28,8 @@ use crate::{
     buffer::Buffer,
     types::{days_ms, NativeType},
 };
+
+use alloc::vec::Vec;
 
 use crate::buffer::MutableBuffer;
 use num::ToPrimitive;
@@ -437,7 +439,7 @@ fn sort_list<O, T>(
 ) -> Int32Array
 where
     O: Offset,
-    T: NativeType + std::cmp::PartialOrd,
+    T: NativeType + core::cmp::PartialOrd,
 {
     let mut valids: Vec<(i32, Box<dyn Array>)> = values
         .as_any()

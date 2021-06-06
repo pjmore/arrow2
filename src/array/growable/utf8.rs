@@ -1,11 +1,12 @@
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::{
     array::{Array, Offset, Utf8Array},
     bitmap::MutableBitmap,
     buffer::MutableBuffer,
 };
-
+use alloc::vec::Vec;
+use alloc::boxed::Box;
 use super::{
     utils::{build_extend_null_bits, extend_offset_values, extend_offsets, ExtendNullBits},
     Growable,
@@ -51,9 +52,9 @@ impl<'a, O: Offset> GrowableUtf8<'a, O> {
     }
 
     fn to(&mut self) -> Utf8Array<O> {
-        let validity = std::mem::take(&mut self.validity);
-        let offsets = std::mem::take(&mut self.offsets);
-        let values = std::mem::take(&mut self.values);
+        let validity = core::mem::take(&mut self.validity);
+        let offsets = core::mem::take(&mut self.offsets);
+        let values = core::mem::take(&mut self.values);
 
         unsafe {
             Utf8Array::<O>::from_data_unchecked(offsets.into(), values.into(), validity.into())
@@ -106,7 +107,7 @@ impl<'a, O: Offset> From<GrowableUtf8<'a, O>> for Utf8Array<O> {
 
 #[cfg(test)]
 mod tests {
-    use std::iter::FromIterator;
+    use core::iter::FromIterator;
 
     use super::*;
 

@@ -31,13 +31,13 @@ use arrow_flight::{
 use futures::{channel::mpsc, sink::SinkExt, stream, StreamExt};
 use tonic::{Request, Streaming};
 
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 type ArrayRef = Arc<dyn Array>;
 type SchemaRef = Arc<Schema>;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
-type Result<T = (), E = Error> = std::result::Result<T, E>;
+type Result<T = (), E = Error> = core::result::Result<T, E>;
 
 type Client = FlightServiceClient<tonic::transport::Channel>;
 

@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use std::cmp::Ordering;
+use core::cmp::Ordering;
 
 use crate::compute::take;
 use crate::error::{ArrowError, Result};
@@ -24,8 +24,9 @@ use crate::{
     buffer::MutableBuffer,
     datatypes::DataType,
 };
-
+use alloc::boxed::Box;
 use super::{sort_to_indices, SortOptions};
+use alloc::vec::Vec;
 
 type IsValid<'a> = Box<dyn Fn(usize) -> bool + 'a>;
 
@@ -46,7 +47,7 @@ pub struct SortColumn<'a> {
 /// Example:
 ///
 /// ```
-/// use std::convert::From;
+/// use core::convert::From;
 /// use arrow2::array::{Utf8Array, Int64Array, Array};
 /// use arrow2::compute::sort::{SortColumn, SortOptions, lexsort};
 /// use arrow2::datatypes::DataType;

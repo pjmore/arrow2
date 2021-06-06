@@ -1,4 +1,4 @@
-use std::ops::Rem;
+use core::ops::Rem;
 
 use num::{traits::CheckedRem, Zero};
 

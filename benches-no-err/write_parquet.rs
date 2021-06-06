@@ -16,7 +16,7 @@ fn write(array: &dyn Array) -> Result<()> {
 
     let parquet_type = to_parquet_type(&field)?;
 
-    let row_groups = std::iter::once(Result::Ok(std::iter::once(Ok(std::iter::once(
+    let row_groups = core::iter::once(Result::Ok(core::iter::once(Ok(core::iter::once(
         array_to_page(array, &parquet_type, compression),
     )))));
 

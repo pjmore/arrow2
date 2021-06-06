@@ -30,6 +30,7 @@ use crate::{
     datatypes::DataType,
     error::{ArrowError, Result},
 };
+use alloc::vec::Vec;
 
 use super::{adjusted_precision_scale, max_value, number_digits};
 

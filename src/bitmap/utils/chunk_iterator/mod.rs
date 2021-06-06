@@ -1,4 +1,4 @@
-use std::convert::TryInto;
+use core::convert::TryInto;
 
 mod merge;
 
@@ -10,14 +10,14 @@ use merge::merge_reversed;
 /// the stack with alignments of `uX`. This allows efficient iteration over bitmaps.
 #[derive(Debug)]
 pub struct BitChunks<'a, T: BitChunk> {
-    chunk_iterator: std::slice::ChunksExact<'a, u8>,
+    chunk_iterator: core::slice::ChunksExact<'a, u8>,
     current: T,
     remainder_bytes: &'a [u8],
     remaining: usize,
     /// offset inside a byte
     bit_offset: u32,
     len: usize,
-    phantom: std::marker::PhantomData<T>,
+    phantom: core::marker::PhantomData<T>,
 }
 
 /// writes `bytes` into `dst`.
@@ -38,7 +38,7 @@ impl<'a, T: BitChunk> BitChunks<'a, T> {
 
         let skip_offset = offset / 8;
         let bit_offset = offset % 8;
-        let size_of = std::mem::size_of::<T>();
+        let size_of = core::mem::size_of::<T>();
 
         let bytes_len = (len + bit_offset + 7) / 8;
         let (mut chunks, remainder_bytes) = if size_of != 1 {
@@ -71,7 +71,7 @@ impl<'a, T: BitChunk> BitChunks<'a, T> {
             remaining,
             remainder_bytes,
             bit_offset: bit_offset as u32,
-            phantom: std::marker::PhantomData,
+            phantom: core::marker::PhantomData,
         }
     }
 
@@ -112,7 +112,7 @@ impl<'a, T: BitChunk> BitChunks<'a, T> {
     // in bits
     #[inline]
     pub fn remainder_len(&self) -> usize {
-        self.len - (std::mem::size_of::<T>() * ((self.len / 8) / std::mem::size_of::<T>()) * 8)
+        self.len - (core::mem::size_of::<T>() * ((self.len / 8) / core::mem::size_of::<T>()) * 8)
     }
 
     #[inline]

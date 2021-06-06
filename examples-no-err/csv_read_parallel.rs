@@ -1,6 +1,6 @@
 use crossbeam_channel::unbounded;
 
-use std::sync::Arc;
+use alloc::sync::Arc;
 use std::thread;
 use std::time::SystemTime;
 

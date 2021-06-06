@@ -1,5 +1,6 @@
-use std::sync::Arc;
-
+use alloc::sync::Arc;
+use alloc::vec::Vec;
+use alloc::boxed::Box;
 use crate::{
     bitmap::Bitmap,
     datatypes::{DataType, Field},
@@ -88,7 +89,7 @@ impl StructArray {
 
 impl Array for StructArray {
     #[inline]
-    fn as_any(&self) -> &dyn std::any::Any {
+    fn as_any(&self) -> &dyn core::any::Any {
         self
     }
 
@@ -112,8 +113,8 @@ impl Array for StructArray {
     }
 }
 
-impl std::fmt::Display for StructArray {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for StructArray {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         writeln!(f, "StructArray{{")?;
         for (field, column) in self.fields().iter().zip(self.values()) {
             writeln!(f, "{}: {},", field.name(), column)?;
@@ -123,7 +124,7 @@ impl std::fmt::Display for StructArray {
 }
 
 unsafe impl ToFfi for StructArray {
-    fn buffers(&self) -> Vec<Option<std::ptr::NonNull<u8>>> {
+    fn buffers(&self) -> Vec<Option<core::ptr::NonNull<u8>>> {
         vec![self.validity.as_ref().map(|x| x.as_ptr())]
     }
 

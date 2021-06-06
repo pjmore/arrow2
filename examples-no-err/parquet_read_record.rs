@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use arrow2::error::Result;
 use arrow2::io::parquet::read;

@@ -1,4 +1,4 @@
-use std::ops::Add;
+use core::ops::Add;
 
 use multiversion::multiversion;
 
@@ -14,6 +14,8 @@ use crate::{
 pub trait Sum<T> {
     fn simd_sum(self) -> T;
 }
+use std_detect::is_x86_feature_detected;
+
 
 #[multiversion]
 #[clone(target = "x86_64+avx")]

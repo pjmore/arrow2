@@ -1,7 +1,7 @@
 //! Contains functions and function factories to order values within arrays.
 
-use std::cmp::Ordering;
-
+use core::cmp::Ordering;
+use alloc::boxed::Box;
 use crate::datatypes::*;
 use crate::error::{ArrowError, Result};
 use crate::{
@@ -16,7 +16,7 @@ pub type DynComparator<'a> = Box<dyn Fn(usize, usize) -> Ordering + 'a>;
 // Original implementation from https://doc.rust-lang.org/std/primitive.f32.html#method.total_cmp
 // TODO to change to use std when it becomes stable
 #[inline]
-pub fn total_cmp_f32(l: &f32, r: &f32) -> std::cmp::Ordering {
+pub fn total_cmp_f32(l: &f32, r: &f32) -> core::cmp::Ordering {
     let mut left = l.to_bits() as i32;
     let mut right = r.to_bits() as i32;
 
@@ -30,7 +30,7 @@ pub fn total_cmp_f32(l: &f32, r: &f32) -> std::cmp::Ordering {
 // Original implementation from https://doc.rust-lang.org/std/primitive.f64.html#method.total_cmp
 // TODO to change to use std when it becomes stable
 #[inline]
-pub fn total_cmp_f64(l: &f64, r: &f64) -> std::cmp::Ordering {
+pub fn total_cmp_f64(l: &f64, r: &f64) -> core::cmp::Ordering {
     let mut left = l.to_bits() as i64;
     let mut right = r.to_bits() as i64;
 
@@ -43,7 +43,7 @@ pub fn total_cmp_f64(l: &f64, r: &f64) -> std::cmp::Ordering {
 /// Total order of all native types whose Rust implementation
 /// that support total order.
 #[inline]
-pub fn total_cmp<T>(l: &T, r: &T) -> std::cmp::Ordering
+pub fn total_cmp<T>(l: &T, r: &T) -> core::cmp::Ordering
 where
     T: NativeType + Ord,
 {
@@ -136,7 +136,7 @@ macro_rules! dyn_dict {
 /// let cmp = build_compare(&array1, &array2)?;
 ///
 /// // 1 (index 0 of array1) is smaller than 4 (index 1 of array2)
-/// assert_eq!(std::cmp::Ordering::Less, (cmp)(0, 1));
+/// assert_eq!(core::cmp::Ordering::Less, (cmp)(0, 1));
 /// # Ok(())
 /// # }
 /// ```
@@ -214,7 +214,7 @@ pub fn build_compare<'a>(left: &'a dyn Array, right: &'a dyn Array) -> Result<Dy
 pub mod tests {
     use super::*;
     use crate::error::Result;
-    use std::cmp::Ordering;
+    use core::cmp::Ordering;
 
     #[test]
     fn test_i32() -> Result<()> {

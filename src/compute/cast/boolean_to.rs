@@ -7,7 +7,7 @@ use crate::{
     array::{Offset, Utf8Array},
     error::Result,
 };
-
+use alloc::boxed::Box;
 pub(super) fn boolean_to_primitive_dyn<T>(array: &dyn Array) -> Result<Box<dyn Array>>
 where
     T: NativeType + NaturalDataType + num::One,

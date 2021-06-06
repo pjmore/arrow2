@@ -9,7 +9,7 @@
 //! would yield a value that is possibly a few seconds off from the true
 //! elapsed time.
 
-use std::ops::{Add, Sub};
+use core::ops::{Add, Sub};
 
 use num::cast::AsPrimitive;
 

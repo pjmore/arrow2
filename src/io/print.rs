@@ -19,7 +19,8 @@ use crate::{array::*, error::Result, record_batch::RecordBatch};
 
 use prettytable::format;
 use prettytable::{Cell, Row, Table};
-
+use alloc::vec::Vec;
+use alloc::string::String;
 /// Returns a visual representation of multiple [`RecordBatch`]es.
 pub fn write(batches: &[RecordBatch]) -> Result<String> {
     Ok(create_table(batches)?.to_string())
@@ -73,7 +74,9 @@ mod tests {
     use crate::{array::*, datatypes::*};
 
     use super::*;
-    use std::sync::Arc;
+    use alloc::sync::Arc;
+    use alloc::vec::Vec;
+    use alloc::boxed::Box;
 
     #[test]
     fn test_write() -> Result<()> {

@@ -1,10 +1,11 @@
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::{
     array::{Array, StructArray},
     bitmap::MutableBitmap,
 };
-
+use alloc::vec::Vec;
+use alloc::boxed::Box;
 use super::{
     make_growable,
     utils::{build_extend_null_bits, ExtendNullBits},
@@ -64,8 +65,8 @@ impl<'a> GrowableStruct<'a> {
     }
 
     fn to(&mut self) -> StructArray {
-        let validity = std::mem::take(&mut self.validity);
-        let values = std::mem::take(&mut self.values);
+        let validity = core::mem::take(&mut self.validity);
+        let values = core::mem::take(&mut self.values);
         let values = values.into_iter().map(|mut x| x.as_arc()).collect();
 
         StructArray::from_data(self.arrays[0].fields().to_vec(), values, validity.into())
@@ -122,7 +123,7 @@ impl<'a> From<GrowableStruct<'a>> for StructArray {
 
 #[cfg(test)]
 mod tests {
-    use std::iter::FromIterator;
+    use core::iter::FromIterator;
 
     use crate::array::{Primitive, Utf8Array};
     use crate::bitmap::Bitmap;

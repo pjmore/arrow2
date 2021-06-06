@@ -27,7 +27,7 @@
 //! [`write_record_batches`]:
 //!
 //! ```
-//! use std::sync::Arc;
+//! use alloc::sync::Arc;
 //!
 //! use arrow2::array::Int32Array;
 //! use arrow2::datatypes::{DataType, Field, Schema};
@@ -51,7 +51,7 @@
 //! [`LineDelimitedWriter`]:
 //!
 //! ```
-//! use std::sync::Arc;
+//! use alloc::sync::Arc;
 //!
 //! use arrow2::array::Int32Array;
 //! use arrow2::datatypes::{DataType, Field, Schema};
@@ -80,7 +80,7 @@
 //! [`ArrayWriter`]:
 //!
 //! ```
-//! use std::sync::Arc;
+//! use alloc::sync::Arc;
 //!
 //! use arrow2::array::Int32Array;
 //! use arrow2::datatypes::{DataType, Field, Schema};

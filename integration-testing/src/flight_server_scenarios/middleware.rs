@@ -29,7 +29,7 @@ use tonic::{transport::Server, Request, Response, Status, Streaming};
 type TonicStream<T> = Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
-type Result<T = (), E = Error> = std::result::Result<T, E>;
+type Result<T = (), E = Error> = core::result::Result<T, E>;
 
 pub async fn scenario_setup(port: &str) -> Result {
     let service = MiddlewareScenarioImpl {};

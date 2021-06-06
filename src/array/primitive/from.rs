@@ -1,5 +1,5 @@
-use std::{iter::FromIterator, sync::Arc};
-
+use core::iter::FromIterator;
+use alloc::sync::Arc;
 use crate::{
     array::{Array, Builder, IntoArray, ToArray, TryFromIterator},
     bitmap::MutableBitmap,
@@ -8,6 +8,7 @@ use crate::{
     types::{NativeType, NaturalDataType},
 };
 use crate::{error::Result as ArrowResult, trusted_len::TrustedLen};
+use alloc::vec::Vec;
 
 use super::PrimitiveArray;
 
@@ -49,7 +50,7 @@ impl<T: NativeType> Primitive<T> {
     #[inline]
     pub unsafe fn from_trusted_len_iter_unchecked<I, P>(iterator: I) -> Self
     where
-        P: std::borrow::Borrow<T>,
+        P: core::borrow::Borrow<T>,
         I: Iterator<Item = Option<P>>,
     {
         let (validity, values) = trusted_len_unzip(iterator);
@@ -61,7 +62,7 @@ impl<T: NativeType> Primitive<T> {
     #[inline]
     pub fn from_trusted_len_iter<I, P>(iterator: I) -> Self
     where
-        P: std::borrow::Borrow<T>,
+        P: core::borrow::Borrow<T>,
         I: TrustedLen<Item = Option<P>>,
     {
         let (validity, values) = unsafe { trusted_len_unzip(iterator) };
@@ -76,7 +77,7 @@ impl<T: NativeType> Primitive<T> {
     #[inline]
     pub unsafe fn try_from_trusted_len_iter_unchecked<E, I, P>(iter: I) -> Result<Self, E>
     where
-        P: std::borrow::Borrow<T>,
+        P: core::borrow::Borrow<T>,
         I: IntoIterator<Item = Result<Option<P>, E>>,
     {
         let iterator = iter.into_iter();
@@ -90,7 +91,7 @@ impl<T: NativeType> Primitive<T> {
     #[inline]
     pub fn try_from_trusted_len_iter<E, I, P>(iterator: I) -> Result<Self, E>
     where
-        P: std::borrow::Borrow<T>,
+        P: core::borrow::Borrow<T>,
         I: TrustedLen<Item = Result<Option<P>, E>>,
     {
         let (validity, values) = unsafe { try_trusted_len_unzip(iterator) }?;
@@ -108,7 +109,7 @@ impl<T: NativeType> Primitive<T> {
 pub(crate) unsafe fn trusted_len_unzip<I, P, T>(iterator: I) -> (MutableBitmap, MutableBuffer<T>)
 where
     T: NativeType,
-    P: std::borrow::Borrow<T>,
+    P: core::borrow::Borrow<T>,
     I: Iterator<Item = Option<P>>,
 {
     let (_, upper) = iterator.size_hint();
@@ -126,7 +127,7 @@ where
             validity.push_unchecked(false);
             T::default()
         };
-        std::ptr::write(dst, item);
+        core::ptr::write(dst, item);
         dst = dst.add(1);
     }
     assert_eq!(
@@ -147,7 +148,7 @@ pub(crate) unsafe fn try_trusted_len_unzip<E, I, P, T>(
 ) -> Result<(MutableBitmap, MutableBuffer<T>), E>
 where
     T: NativeType,
-    P: std::borrow::Borrow<T>,
+    P: core::borrow::Borrow<T>,
     I: Iterator<Item = Result<Option<P>, E>>,
 {
     let (_, upper) = iterator.size_hint();
@@ -165,7 +166,7 @@ where
             null.push(false);
             T::default()
         };
-        std::ptr::write(dst, item);
+        core::ptr::write(dst, item);
         dst = dst.add(1);
     }
     assert_eq!(
@@ -182,6 +183,7 @@ where
 /// Auxiliary struct used to create a [`PrimitiveArray`] out of iterators.
 /// Primitive arrays are often built from this struct, that knows how to cheaply convert itself
 /// into a primitive array.
+#[repr(C)]
 #[derive(Debug)]
 pub struct Primitive<T: NativeType> {
     values: MutableBuffer<T>,
@@ -232,7 +234,7 @@ impl<T: NativeType> Primitive<T> {
     }
 }
 
-impl<T: NativeType, Ptr: std::borrow::Borrow<Option<T>>> FromIterator<Ptr> for Primitive<T> {
+impl<T: NativeType, Ptr: core::borrow::Borrow<Option<T>>> FromIterator<Ptr> for Primitive<T> {
     fn from_iter<I: IntoIterator<Item = Ptr>>(iter: I) -> Self {
         let iter = iter.into_iter();
         let (lower, _) = iter.size_hint();
@@ -262,7 +264,7 @@ impl<T: NativeType> Default for Primitive<T> {
     }
 }
 
-impl<T: NativeType, Ptr: std::borrow::Borrow<Option<T>>> TryFromIterator<Ptr> for Primitive<T> {
+impl<T: NativeType, Ptr: core::borrow::Borrow<Option<T>>> TryFromIterator<Ptr> for Primitive<T> {
     fn try_from_iter<I: IntoIterator<Item = ArrowResult<Ptr>>>(iter: I) -> ArrowResult<Self> {
         let iter = iter.into_iter();
         let (lower, _) = iter.size_hint();

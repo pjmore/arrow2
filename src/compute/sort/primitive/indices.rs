@@ -30,7 +30,7 @@ use super::super::SortOptions;
 unsafe fn sort_inner<T, F>(indices: &mut [i32], values: &[T], mut cmp: F, descending: bool)
 where
     T: NativeType,
-    F: FnMut(&T, &T) -> std::cmp::Ordering,
+    F: FnMut(&T, &T) -> core::cmp::Ordering,
 {
     if descending {
         indices.sort_by(|lhs, rhs| {
@@ -54,7 +54,7 @@ pub fn indices_sorted_by<T, F>(
 ) -> PrimitiveArray<i32>
 where
     T: NativeType,
-    F: Fn(&T, &T) -> std::cmp::Ordering,
+    F: Fn(&T, &T) -> core::cmp::Ordering,
 {
     let descending = options.descending;
     let values = array.values();
@@ -138,7 +138,7 @@ mod tests {
 
     fn test<T>(data: &[Option<T>], data_type: DataType, options: SortOptions, expected_data: &[i32])
     where
-        T: NativeType + std::cmp::Ord,
+        T: NativeType + core::cmp::Ord,
     {
         let input = Primitive::<T>::from(data).to(data_type);
         let expected = Int32Array::from_slice(&expected_data);

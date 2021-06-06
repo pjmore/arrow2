@@ -19,8 +19,8 @@
 //! arrays from and to Python.
 
 use std::error;
-use std::fmt;
-use std::sync::Arc;
+use core::fmt;
+use alloc::sync::Arc;
 
 use pyo3::exceptions::PyOSError;
 use pyo3::wrap_pyfunction;

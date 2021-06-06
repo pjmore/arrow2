@@ -1,4 +1,4 @@
-use std::iter::FromIterator;
+use core::iter::FromIterator;
 
 use crate::{buffer::MutableBuffer, trusted_len::TrustedLen};
 
@@ -9,6 +9,7 @@ use super::Bitmap;
 /// each bool is stored as a single bit.
 /// # Implementation
 /// This container is backed by [`MutableBuffer<u8>`] and can be converted to a [`Bitmap`] at `O(1)`.
+#[repr(C)]
 #[derive(Debug)]
 pub struct MutableBitmap {
     buffer: MutableBuffer<u8>,
@@ -113,7 +114,7 @@ impl MutableBitmap {
     #[inline]
     pub fn extend_constant(&mut self, additional: usize, value: bool) {
         if value {
-            let iter = std::iter::repeat(true).take(additional);
+            let iter = core::iter::repeat(true).take(additional);
             self.extend_from_trusted_len_iter(iter);
         } else {
             self.buffer
@@ -337,9 +338,9 @@ impl MutableBitmap {
     }
 
     /// Creates a new [`Bitmap`] from an iterator of booleans.
-    pub fn try_from_trusted_len_iter<E, I>(iterator: I) -> std::result::Result<Self, E>
+    pub fn try_from_trusted_len_iter<E, I>(iterator: I) -> core::result::Result<Self, E>
     where
-        I: TrustedLen<Item = std::result::Result<bool, E>>,
+        I: TrustedLen<Item = core::result::Result<bool, E>>,
     {
         unsafe { Self::try_from_trusted_len_iter_unchecked(iterator) }
     }
@@ -349,9 +350,9 @@ impl MutableBitmap {
     /// The caller must guarantee that the iterator is `TrustedLen`.
     pub unsafe fn try_from_trusted_len_iter_unchecked<E, I>(
         mut iterator: I,
-    ) -> std::result::Result<Self, E>
+    ) -> core::result::Result<Self, E>
     where
-        I: Iterator<Item = std::result::Result<bool, E>>,
+        I: Iterator<Item = core::result::Result<bool, E>>,
     {
         let length = iterator.size_hint().1.unwrap();
 

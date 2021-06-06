@@ -44,7 +44,7 @@ fn read_optional(
             hybrid_rle::HybridEncoded::Bitpacked(packed_validity) => {
                 // the pack may contain more items than needed.
                 let remaining = length - values.len();
-                let len = std::cmp::min(packed_validity.len() * 8, remaining);
+                let len = core::cmp::min(packed_validity.len() * 8, remaining);
                 for is_valid in BitmapIter::new(packed_validity, 0, len) {
                     validity.push(is_valid);
                     let value = if is_valid {
@@ -75,7 +75,7 @@ pub fn iter_to_array<I, E>(mut iter: I, metadata: &ColumnChunkMetaData) -> Resul
 where
     ArrowError: From<E>,
     E: Clone,
-    I: StreamingIterator<Item = std::result::Result<Page, E>>,
+    I: StreamingIterator<Item = core::result::Result<Page, E>>,
 {
     let capacity = metadata.num_values() as usize;
     let mut values = MutableBitmap::with_capacity(capacity);

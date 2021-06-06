@@ -83,7 +83,7 @@ mod tests {
     use crate::datatypes::*;
 
     use std::io::Cursor;
-    use std::sync::Arc;
+    use alloc::sync::Arc;
 
     fn data() -> RecordBatch {
         let schema = Schema::new(vec![

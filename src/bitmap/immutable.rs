@@ -1,5 +1,5 @@
-use std::iter::FromIterator;
-use std::sync::Arc;
+use core::iter::FromIterator;
+use alloc::sync::Arc;
 
 use crate::{buffer::bytes::Bytes, buffer::MutableBuffer, trusted_len::TrustedLen};
 
@@ -140,7 +140,7 @@ impl Bitmap {
 
     /// Returns a pointer to the start of this [`Bitmap`] (ignores `offsets`)
     /// This pointer is allocated iff `self.len() > 0`.
-    pub(crate) fn as_ptr(&self) -> std::ptr::NonNull<u8> {
+    pub(crate) fn as_ptr(&self) -> core::ptr::NonNull<u8> {
         self.bytes.ptr()
     }
 }
@@ -187,12 +187,12 @@ impl Bitmap {
     pub fn from_trusted_len_iter<I: TrustedLen<Item = bool>>(iterator: I) -> Self {
         MutableBitmap::from_trusted_len_iter(iterator).into()
     }
-
+    
     /// Creates a new [`Bitmap`] from a fallible iterator of booleans.
     #[inline]
-    pub fn try_from_trusted_len_iter<E, I: TrustedLen<Item = std::result::Result<bool, E>>>(
+    pub fn try_from_trusted_len_iter<E, I: TrustedLen<Item = core::result::Result<bool, E>>>(
         iterator: I,
-    ) -> std::result::Result<Self, E> {
+    ) -> core::result::Result<Self, E> {
         Ok(MutableBitmap::try_from_trusted_len_iter(iterator)?.into())
     }
 
@@ -202,10 +202,10 @@ impl Bitmap {
     #[inline]
     pub unsafe fn try_from_trusted_len_iter_unchecked<
         E,
-        I: Iterator<Item = std::result::Result<bool, E>>,
+        I: Iterator<Item = core::result::Result<bool, E>>,
     >(
         iterator: I,
-    ) -> std::result::Result<Self, E> {
+    ) -> core::result::Result<Self, E> {
         Ok(MutableBitmap::try_from_trusted_len_iter_unchecked(iterator)?.into())
     }
 }

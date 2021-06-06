@@ -64,8 +64,8 @@ impl SparseMatrixCompressedAxis {
         }
     }
 }
-impl std::fmt::Debug for SparseMatrixCompressedAxis {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for SparseMatrixCompressedAxis {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -166,8 +166,8 @@ impl SparseTensorIndex {
         }
     }
 }
-impl std::fmt::Debug for SparseTensorIndex {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for SparseTensorIndex {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -427,8 +427,8 @@ impl<'a: 'b, 'b> SparseTensorIndexCOOBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for SparseTensorIndexCOO<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for SparseTensorIndexCOO<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("SparseTensorIndexCOO");
         ds.field("indicesType", &self.indicesType());
         ds.field("indicesStrides", &self.indicesStrides());
@@ -668,8 +668,8 @@ impl<'a: 'b, 'b> SparseMatrixIndexCSXBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for SparseMatrixIndexCSX<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for SparseMatrixIndexCSX<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("SparseMatrixIndexCSX");
         ds.field("compressedAxis", &self.compressedAxis());
         ds.field("indptrType", &self.indptrType());
@@ -970,8 +970,8 @@ impl<'a: 'b, 'b> SparseTensorIndexCSFBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for SparseTensorIndexCSF<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for SparseTensorIndexCSF<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("SparseTensorIndexCSF");
         ds.field("indptrType", &self.indptrType());
         ds.field("indptrBuffers", &self.indptrBuffers());
@@ -1607,8 +1607,8 @@ impl<'a: 'b, 'b> SparseTensorBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for SparseTensor<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for SparseTensor<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("SparseTensor");
         ds.field("type_type", &self.type_type());
         match self.type_type() {

@@ -33,8 +33,8 @@ However, these typically deal with different bounds: serialization is often CPU 
 Suppose that we know that we are getting CPU-bounded at serialization, and would like to offload that workload to other threads, at the cost of a higher memory usage. We would achieve this as follows (two batches for simplicity):
 
 ```rust
-use std::sync::mpsc::{Sender, Receiver};
-use std::sync::mpsc;
+use alloc::sync::mpsc::{Sender, Receiver};
+use alloc::sync::mpsc;
 use std::thread;
 
 use arrow2::io::csv::write;

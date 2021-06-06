@@ -3,8 +3,8 @@ use crate::{datatypes::*, temporal_conversions, types::days_ms};
 use super::super::{display_fmt, Array};
 use super::PrimitiveArray;
 
-impl std::fmt::Display for PrimitiveArray<i32> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for PrimitiveArray<i32> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let new_lines = false;
         let head = &format!("{}", self.data_type());
         match self.data_type() {
@@ -41,8 +41,8 @@ impl std::fmt::Display for PrimitiveArray<i32> {
     }
 }
 
-impl std::fmt::Display for PrimitiveArray<i64> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for PrimitiveArray<i64> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let new_lines = false;
         let head = &format!("{}", self.data_type());
         match self.data_type() {
@@ -126,8 +126,8 @@ impl std::fmt::Display for PrimitiveArray<i64> {
     }
 }
 
-impl std::fmt::Display for PrimitiveArray<i128> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for PrimitiveArray<i128> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self.data_type() {
             DataType::Decimal(_, scale) => {
                 let new_lines = false;
@@ -147,8 +147,8 @@ impl std::fmt::Display for PrimitiveArray<i128> {
     }
 }
 
-impl std::fmt::Display for PrimitiveArray<days_ms> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for PrimitiveArray<days_ms> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let new_lines = false;
         let head = &format!("{}", self.data_type());
         let iter = self.iter().map(|x| {
@@ -161,8 +161,8 @@ impl std::fmt::Display for PrimitiveArray<days_ms> {
 
 macro_rules! display {
     ($ty:ty) => {
-        impl std::fmt::Display for PrimitiveArray<$ty> {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        impl core::fmt::Display for PrimitiveArray<$ty> {
+            fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
                 let head = &format!("{}", self.data_type());
                 display_fmt(self.iter(), head, f, false)
             }

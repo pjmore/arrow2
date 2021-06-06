@@ -20,7 +20,7 @@ use clap::{App, Arg};
 use arrow_integration_testing::flight_server_scenarios;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
-type Result<T = (), E = Error> = std::result::Result<T, E>;
+type Result<T = (), E = Error> = core::result::Result<T, E>;
 
 #[tokio::main]
 async fn main() -> Result {

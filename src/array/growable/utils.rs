@@ -3,7 +3,7 @@ use crate::{
     bitmap::{Bitmap, MutableBitmap},
     buffer::MutableBuffer,
 };
-
+use alloc::boxed::Box;
 pub(super) fn extend_offsets<T: Offset>(
     buffer: &mut MutableBuffer<T>,
     last_offset: &mut T,

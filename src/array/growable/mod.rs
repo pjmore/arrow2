@@ -3,6 +3,8 @@
 
 use crate::array::*;
 use crate::datatypes::*;
+use alloc::boxed::Box;
+use alloc::vec::Vec;
 
 mod binary;
 pub use binary::GrowableBinary;
@@ -40,7 +42,7 @@ pub trait Growable<'a> {
 
     /// Converts itself to an `Arc<dyn Array>`, thereby finishing the mutation.
     /// Self will be empty after such operation
-    fn as_arc(&mut self) -> std::sync::Arc<dyn Array> {
+    fn as_arc(&mut self) -> alloc::sync::Arc<dyn Array> {
         self.as_box().into()
     }
 
@@ -59,8 +61,8 @@ macro_rules! dyn_growable {
                     .downcast_ref::<PrimitiveArray<$ty>>()
                     .unwrap()
             })
-            .collect::<Vec<_>>();
-        Box::new(primitive::GrowablePrimitive::<$ty>::new(
+            .collect::<alloc::vec::Vec<_>>();
+        alloc::boxed::Box::new(primitive::GrowablePrimitive::<$ty>::new(
             &arrays,
             $use_validity,
             $capacity,
@@ -78,8 +80,8 @@ macro_rules! dyn_dict_growable {
                     .downcast_ref::<DictionaryArray<$ty>>()
                     .unwrap()
             })
-            .collect::<Vec<_>>();
-        Box::new(dictionary::GrowableDictionary::<$ty>::new(
+            .collect::<alloc::vec::Vec<_>>();
+        alloc::boxed::Box::new(dictionary::GrowableDictionary::<$ty>::new(
             &arrays,
             $use_validity,
             $capacity,
@@ -206,7 +208,7 @@ pub fn make_growable<'a>(
 /*
 #[cfg(test)]
 mod tests {
-    use std::convert::TryFrom;
+    use core::convert::TryFrom;
 
     use super::*;
 

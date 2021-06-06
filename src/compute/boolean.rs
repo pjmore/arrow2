@@ -139,7 +139,7 @@ pub fn is_null(input: &dyn Array) -> BooleanArray {
 /// ```
 pub fn is_not_null(input: &dyn Array) -> BooleanArray {
     let values = match input.validity() {
-        None => Bitmap::from_trusted_len_iter(std::iter::repeat(true).take(input.len())),
+        None => Bitmap::from_trusted_len_iter(core::iter::repeat(true).take(input.len())),
         Some(buffer) => buffer.clone(),
     };
     BooleanArray::from_data(values, None)

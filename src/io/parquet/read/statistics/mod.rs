@@ -14,7 +14,7 @@ mod boolean;
 pub use boolean::*;
 
 /// Trait denoting a deserialized parquet statistics (into arrow).
-pub trait Statistics: std::fmt::Debug {
+pub trait Statistics: core::fmt::Debug {
     fn data_type(&self) -> &DataType;
 }
 

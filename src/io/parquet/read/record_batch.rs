@@ -86,8 +86,8 @@ impl<R: Read + Seek> Iterator for RecordReader<R> {
         // todo: avoid these clones.
         let projection = self.projection.clone();
 
-        let b1 = std::mem::take(&mut self.buffer);
-        let b2 = std::mem::take(&mut self.decompress_buffer);
+        let b1 = core::mem::take(&mut self.buffer);
+        let b2 = core::mem::take(&mut self.decompress_buffer);
 
         let a = self.schema.clone().fields().iter().enumerate().try_fold(
             (b1, b2, Vec::with_capacity(self.schema.fields().len())),

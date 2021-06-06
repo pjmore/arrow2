@@ -1,5 +1,5 @@
 use crate::types::BitChunkIter;
-use std::convert::TryInto;
+use core::convert::TryInto;
 
 use super::*;
 
@@ -37,7 +37,7 @@ macro_rules! simd {
             }
         }
 
-        impl std::ops::Index<usize> for $name {
+        impl core::ops::Index<usize> for $name {
             type Output = $type;
 
             #[inline]
@@ -46,7 +46,7 @@ macro_rules! simd {
             }
         }
 
-        impl std::ops::IndexMut<usize> for $name {
+        impl core::ops::IndexMut<usize> for $name {
             #[inline]
             fn index_mut(&mut self, index: usize) -> &mut Self::Output {
                 &mut self.0[index]

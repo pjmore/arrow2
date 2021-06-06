@@ -59,7 +59,7 @@ pub mod basic;
 pub mod decimal;
 pub mod time;
 
-use std::ops::{Add, Div, Mul, Neg, Rem, Sub};
+use core::ops::{Add, Div, Mul, Neg, Rem, Sub};
 
 use num::Zero;
 
@@ -69,7 +69,7 @@ use crate::types::NativeType;
 use crate::{array::*, bitmap::Bitmap};
 
 use super::arity::unary;
-
+use alloc::boxed::Box;
 // Macro to evaluate match branch in arithmetic function.
 // The macro is used to downcast both arrays to a primitive_array_type. If there
 // is an error then an ArrowError is return with the data_type that cause it.
@@ -80,8 +80,8 @@ macro_rules! primitive {
         let res_lhs = $lhs.as_any().downcast_ref().unwrap();
         let res_rhs = $rhs.as_any().downcast_ref().unwrap();
         arithmetic_primitive::<$array_type>(res_lhs, $op, res_rhs)
-            .map(Box::new)
-            .map(|x| x as Box<dyn Array>)
+            .map(alloc::boxed::Box::new)
+            .map(|x| x as alloc::boxed::Box<dyn Array>)
     }};
 }
 

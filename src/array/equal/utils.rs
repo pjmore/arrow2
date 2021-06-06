@@ -3,6 +3,7 @@ use crate::{
     bitmap::{Bitmap, MutableBitmap},
     datatypes::DataType,
 };
+use alloc::vec::Vec;
 
 // whether bits along the positions are equal
 // `lhs_start`, `rhs_start` and `len` are _measured in bits_.

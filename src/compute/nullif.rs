@@ -5,7 +5,7 @@ use crate::error::{ArrowError, Result};
 use crate::{array::Array, types::NativeType};
 
 use super::utils::combine_validities;
-
+use alloc::boxed::Box;
 /// Returns an array whose validity is null iff `lhs == rhs` or `lhs` is null.
 /// This has the same semantics as postgres.
 /// # Example

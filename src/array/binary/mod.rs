@@ -1,5 +1,5 @@
 use crate::{bitmap::Bitmap, buffer::Buffer, datatypes::DataType};
-
+use alloc::boxed::Box;
 use super::{
     display_fmt, display_helper, specification::check_offsets, specification::Offset, Array,
     GenericBinaryArray,
@@ -76,7 +76,7 @@ impl<O: Offset> BinaryArray<O> {
         let length = (offset_1 - offset).to_usize().unwrap();
         let offset = offset.to_usize().unwrap();
 
-        std::slice::from_raw_parts(self.values.as_ptr().add(offset), length)
+        core::slice::from_raw_parts(self.values.as_ptr().add(offset), length)
     }
 
     #[inline]
@@ -102,7 +102,7 @@ impl<O: Offset> BinaryArray<O> {
 
 impl<O: Offset> Array for BinaryArray<O> {
     #[inline]
-    fn as_any(&self) -> &dyn std::any::Any {
+    fn as_any(&self) -> &dyn core::any::Any {
         self
     }
 
@@ -125,8 +125,8 @@ impl<O: Offset> Array for BinaryArray<O> {
     }
 }
 
-impl<O: Offset> std::fmt::Display for BinaryArray<O> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl<O: Offset> core::fmt::Display for BinaryArray<O> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let a = |x: &[u8]| display_helper(x.iter().map(|x| Some(format!("{:b}", x)))).join(" ");
         let iter = self.iter().map(|x| x.map(a));
         let head = if O::is_large() {
@@ -159,7 +159,7 @@ pub use from::*;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::iter::FromIterator;
+    use core::iter::FromIterator;
 
     #[test]
     fn basics() {

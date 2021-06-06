@@ -113,7 +113,7 @@ fn struct_array_to_jsonmap_array(array: &StructArray, row_count: usize) -> Vec<M
 
     let fields = array.fields();
 
-    let mut inner_objs = std::iter::repeat(Map::new())
+    let mut inner_objs = core::iter::repeat(Map::new())
         .take(row_count)
         .collect::<Vec<Map<String, Value>>>();
 
@@ -136,7 +136,7 @@ fn struct_array_to_jsonmap_array(array: &StructArray, row_count: usize) -> Vec<M
 
 fn write_array(array: &dyn Array) -> Value {
     Value::Array(match array.data_type() {
-        DataType::Null => std::iter::repeat(Value::Null).take(array.len()).collect(),
+        DataType::Null => core::iter::repeat(Value::Null).take(array.len()).collect(),
         DataType::Boolean => array
             .as_any()
             .downcast_ref::<BooleanArray>()
@@ -337,7 +337,7 @@ fn set_column_for_json_rows(
 /// Serializes a [`RecordBatch`] into Json
 /// # Example
 /// ```
-/// use std::sync::Arc;
+/// use alloc::sync::Arc;
 /// use arrow2::array::Primitive;
 /// use arrow2::datatypes::{DataType, Field, Schema};
 /// use arrow2::io::json;
@@ -354,7 +354,7 @@ fn set_column_for_json_rows(
 /// );
 /// ```
 pub fn write_record_batches(batches: &[RecordBatch]) -> Vec<Map<String, Value>> {
-    let mut rows: Vec<Map<String, Value>> = std::iter::repeat(Map::new())
+    let mut rows: Vec<Map<String, Value>> = core::iter::repeat(Map::new())
         .take(batches.iter().map(|b| b.num_rows()).sum())
         .collect();
 

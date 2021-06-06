@@ -1,5 +1,5 @@
 //! Definition of basic sub operations with primitive arrays
-use std::ops::Sub;
+use core::ops::Sub;
 
 use num::{
     traits::{ops::overflowing::OverflowingSub, SaturatingSub},

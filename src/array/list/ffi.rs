@@ -1,16 +1,17 @@
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::{array::FromFfi, error::Result, ffi};
 
 use super::super::{ffi::ToFfi, specification::Offset, Array};
 use super::ListArray;
+use alloc::vec::Vec;
 
 unsafe impl<O: Offset> ToFfi for ListArray<O> {
-    fn buffers(&self) -> Vec<Option<std::ptr::NonNull<u8>>> {
+    fn buffers(&self) -> Vec<Option<core::ptr::NonNull<u8>>> {
         unsafe {
             vec![
                 self.validity.as_ref().map(|x| x.as_ptr()),
-                Some(std::ptr::NonNull::new_unchecked(
+                Some(core::ptr::NonNull::new_unchecked(
                     self.offsets.as_ptr() as *mut u8
                 )),
             ]

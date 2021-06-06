@@ -1,5 +1,5 @@
 use crate::{bitmap::Bitmap, datatypes::DataType};
-
+use alloc::boxed::Box;
 use super::{display_fmt, Array};
 
 /// A [`BooleanArray`] is arrow's equivalent to `Vec<Option<bool>>`, i.e.
@@ -75,7 +75,7 @@ impl BooleanArray {
 
 impl Array for BooleanArray {
     #[inline]
-    fn as_any(&self) -> &dyn std::any::Any {
+    fn as_any(&self) -> &dyn core::any::Any {
         self
     }
 
@@ -100,8 +100,8 @@ impl Array for BooleanArray {
     }
 }
 
-impl std::fmt::Display for BooleanArray {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for BooleanArray {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         display_fmt(self.iter(), "BooleanArray", f, false)
     }
 }
@@ -123,7 +123,7 @@ mod from;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::iter::FromIterator;
+    use core::iter::FromIterator;
 
     #[test]
     fn basics() {

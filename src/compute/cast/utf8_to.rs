@@ -5,6 +5,7 @@ use crate::{
     datatypes::{DataType, TimeUnit},
     types::NativeType,
 };
+use alloc::boxed::Box;
 use crate::{error::Result, temporal_conversions::EPOCH_DAYS_FROM_CE};
 
 use super::utf8_to_timestamp_ns_scalar;

@@ -15,13 +15,12 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use std::{
-    ffi::CStr,
-    ffi::CString,
-    ptr::{self, NonNull},
-    sync::Arc,
-};
-
+use alloc::boxed::Box;
+use cstr_core::{CStr, CString};
+use core::ptr::{self, NonNull};
+use alloc::sync::Arc;
+use alloc::vec::Vec;
+use alloc::string::String;
 use crate::{
     array::Array,
     bitmap::{utils::bytes_for, Bitmap},
@@ -46,15 +45,15 @@ struct SchemaPrivateData {
 #[repr(C)]
 #[derive(Debug)]
 pub struct Ffi_ArrowSchema {
-    format: *const ::std::os::raw::c_char,
-    name: *const ::std::os::raw::c_char,
-    metadata: *const ::std::os::raw::c_char,
+    format: *const cstr_core::c_char,
+    name: *const cstr_core::c_char,
+    metadata: *const cstr_core::c_char,
     flags: i64,
     n_children: i64,
     children: *mut *mut Ffi_ArrowSchema,
     dictionary: *mut Ffi_ArrowSchema,
-    release: ::std::option::Option<unsafe extern "C" fn(arg1: *mut Ffi_ArrowSchema)>,
-    private_data: *mut ::std::os::raw::c_void,
+    release: ::core::option::Option<unsafe extern "C" fn(arg1: *mut Ffi_ArrowSchema)>,
+    private_data: *mut cty::c_void,
 }
 
 // callback used to drop [Ffi_ArrowSchema] when it is exported.
@@ -65,8 +64,8 @@ unsafe extern "C" fn c_release_schema(schema: *mut Ffi_ArrowSchema) {
     let schema = &mut *schema;
 
     // take ownership back to release it.
-    CString::from_raw(schema.format as *mut std::os::raw::c_char);
-    CString::from_raw(schema.name as *mut std::os::raw::c_char);
+    CString::from_raw(schema.format as *mut cstr_core::c_char);
+    CString::from_raw(schema.name as *mut cstr_core::c_char);
     let private = Box::from_raw(schema.private_data as *mut SchemaPrivateData);
     for child in private.children_ptr.iter() {
         let _ = Box::from_raw(*child);
@@ -113,28 +112,28 @@ impl Ffi_ArrowSchema {
         Ok(Ffi_ArrowSchema {
             format: CString::new(format).unwrap().into_raw(),
             name: CString::new(name).unwrap().into_raw(),
-            metadata: std::ptr::null_mut(),
+            metadata: core::ptr::null_mut(),
             flags,
             n_children,
             children: private.children_ptr.as_mut_ptr(),
-            dictionary: std::ptr::null_mut(),
+            dictionary: core::ptr::null_mut(),
             release: Some(c_release_schema),
-            private_data: Box::into_raw(private) as *mut ::std::os::raw::c_void,
+            private_data: Box::into_raw(private) as *mut cty::c_void,
         })
     }
 
     /// create an empty [Ffi_ArrowSchema]
     fn empty() -> Self {
         Self {
-            format: std::ptr::null_mut(),
-            name: std::ptr::null_mut(),
-            metadata: std::ptr::null_mut(),
+            format: core::ptr::null_mut(),
+            name: core::ptr::null_mut(),
+            metadata: core::ptr::null_mut(),
             flags: 0,
             n_children: 0,
             children: ptr::null_mut(),
-            dictionary: std::ptr::null_mut(),
+            dictionary: core::ptr::null_mut(),
             release: None,
-            private_data: std::ptr::null_mut(),
+            private_data: core::ptr::null_mut(),
         }
     }
 
@@ -274,16 +273,16 @@ pub struct Ffi_ArrowArray {
     pub(crate) offset: i64,
     pub(crate) n_buffers: i64,
     pub(crate) n_children: i64,
-    pub(crate) buffers: *mut *const ::std::os::raw::c_void,
+    pub(crate) buffers: *mut *const cty::c_void,
     children: *mut *mut Ffi_ArrowArray,
     dictionary: *mut Ffi_ArrowArray,
-    release: ::std::option::Option<unsafe extern "C" fn(arg1: *mut Ffi_ArrowArray)>,
+    release: ::core::option::Option<unsafe extern "C" fn(arg1: *mut Ffi_ArrowArray)>,
     // When exported, this MUST contain everything that is owned by this array.
     // for example, any buffer pointed to in `buffers` must be here, as well as the `buffers` pointer
     // itself.
     // In other words, everything in [Ffi_ArrowArray] must be owned by `private_data` and can assume
     // that they do not outlive `private_data`.
-    private_data: *mut ::std::os::raw::c_void,
+    private_data: *mut cty::c_void,
 }
 
 impl Drop for Ffi_ArrowArray {
@@ -314,7 +313,7 @@ unsafe extern "C" fn c_release_array(array: *mut Ffi_ArrowArray) {
 #[allow(dead_code)]
 struct PrivateData {
     array: Arc<dyn Array>,
-    buffers_ptr: Box<[*const std::os::raw::c_void]>,
+    buffers_ptr: Box<[*const cty::c_void]>,
     children_ptr: Box<[*mut Ffi_ArrowArray]>,
 }
 
@@ -329,8 +328,8 @@ impl Ffi_ArrowArray {
             .iter()
             .map(|maybe_buffer| match maybe_buffer {
                 // note that `raw_data` takes into account the buffer's offset
-                Some(b) => b.as_ptr() as *const std::os::raw::c_void,
-                None => std::ptr::null(),
+                Some(b) => b.as_ptr() as *const cty::c_void,
+                None => core::ptr::null(),
             })
             .collect::<Box<[_]>>();
         let n_buffers = buffers.len() as i64;
@@ -359,9 +358,9 @@ impl Ffi_ArrowArray {
             n_children,
             buffers: private_data.buffers_ptr.as_mut_ptr(),
             children: private_data.children_ptr.as_mut_ptr(),
-            dictionary: std::ptr::null_mut(),
+            dictionary: core::ptr::null_mut(),
             release: Some(c_release_array),
-            private_data: Box::into_raw(private_data) as *mut ::std::os::raw::c_void,
+            private_data: Box::into_raw(private_data) as *mut cty::c_void,
         }
     }
 
@@ -373,11 +372,11 @@ impl Ffi_ArrowArray {
             offset: 0,
             n_buffers: 0,
             n_children: 0,
-            buffers: std::ptr::null_mut(),
-            children: std::ptr::null_mut(),
-            dictionary: std::ptr::null_mut(),
+            buffers: core::ptr::null_mut(),
+            children: core::ptr::null_mut(),
+            dictionary: core::ptr::null_mut(),
             release: None,
-            private_data: std::ptr::null_mut(),
+            private_data: core::ptr::null_mut(),
         }
     }
 

@@ -22,8 +22,8 @@ pub use writer::{ArrayWriter, LineDelimitedWriter, Writer};
 
 #[cfg(test)]
 mod tests {
-    use std::iter::FromIterator;
-    use std::sync::Arc;
+    use core::iter::FromIterator;
+    use alloc::sync::Arc;
 
     use crate::array::*;
     use crate::bitmap::Bitmap;

@@ -1,11 +1,12 @@
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::{
     array::{Array, ListArray, Offset},
     bitmap::MutableBitmap,
     buffer::MutableBuffer,
 };
-
+use alloc::vec::Vec;
+use alloc::boxed::Box;
 use super::{
     make_growable,
     utils::{build_extend_null_bits, extend_offsets, ExtendNullBits},
@@ -111,8 +112,8 @@ impl<'a, O: Offset> GrowableList<'a, O> {
     }
 
     fn to(&mut self) -> ListArray<O> {
-        let validity = std::mem::take(&mut self.validity);
-        let offsets = std::mem::take(&mut self.offsets);
+        let validity = core::mem::take(&mut self.validity);
+        let offsets = core::mem::take(&mut self.offsets);
         let values = self.values.as_arc();
 
         ListArray::<O>::from_data(

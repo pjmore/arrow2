@@ -15,10 +15,10 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use std::collections::HashMap;
-use std::convert::TryFrom;
+use hashbrown::HashMap;;
+use core::convert::TryFrom;
 use std::pin::Pin;
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use arrow2::{
     array::Array,
@@ -37,7 +37,7 @@ use tonic::{transport::Server, Request, Response, Status, Streaming};
 type TonicStream<T> = Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
-type Result<T = (), E = Error> = std::result::Result<T, E>;
+type Result<T = (), E = Error> = core::result::Result<T, E>;
 
 pub async fn scenario_setup(port: &str) -> Result {
     let addr = super::listen_on(port).await?;
@@ -108,7 +108,7 @@ impl FlightService for FlightServiceImpl {
 
         let options = ipc::write::common::IpcWriteOptions::default();
 
-        let schema = std::iter::once({
+        let schema = core::iter::once({
             Ok(arrow_flight::utils::flight_data_from_arrow_schema(
                 &flight.schema,
                 &options,
@@ -129,7 +129,7 @@ impl FlightService for FlightServiceImpl {
 
                 dictionary_flight_data
                     .into_iter()
-                    .chain(std::iter::once(batch_flight_data))
+                    .chain(core::iter::once(batch_flight_data))
                     .map(Ok)
             });
 

@@ -1,4 +1,4 @@
-use std::ops::Add;
+use core::ops::Add;
 
 use crate::types::simd::*;
 
@@ -7,7 +7,7 @@ use super::super::sum::Sum;
 
 macro_rules! simd_add {
     ($simd:tt, $type:ty, $lanes:expr, $add:tt) => {
-        impl std::ops::AddAssign for $simd {
+        impl core::ops::AddAssign for $simd {
             #[inline]
             fn add_assign(&mut self, rhs: Self) {
                 for i in 0..$lanes {
@@ -16,7 +16,7 @@ macro_rules! simd_add {
             }
         }
 
-        impl std::ops::Add for $simd {
+        impl core::ops::Add for $simd {
             type Output = Self;
 
             #[inline]

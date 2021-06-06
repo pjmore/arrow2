@@ -27,8 +27,8 @@ use std::{cmp::Ordering, mem};
 #[repr(transparent)]
 #[derive(Clone, Copy, PartialEq)]
 pub struct Block(pub [u8; 24]);
-impl std::fmt::Debug for Block {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for Block {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("Block")
             .field("offset", &self.offset())
             .field("metaDataLength", &self.metaDataLength())
@@ -58,7 +58,7 @@ impl<'b> flatbuffers::Push for Block {
     #[inline]
     fn push(&self, dst: &mut [u8], _rest: &[u8]) {
         let src = unsafe {
-            ::std::slice::from_raw_parts(self as *const Block as *const u8, Self::size())
+            ::core::slice::from_raw_parts(self as *const Block as *const u8, Self::size())
         };
         dst.copy_from_slice(src);
     }
@@ -69,7 +69,7 @@ impl<'b> flatbuffers::Push for &'b Block {
     #[inline]
     fn push(&self, dst: &mut [u8], _rest: &[u8]) {
         let src = unsafe {
-            ::std::slice::from_raw_parts(*self as *const Block as *const u8, Self::size())
+            ::core::slice::from_raw_parts(*self as *const Block as *const u8, Self::size())
         };
         dst.copy_from_slice(src);
     }
@@ -371,8 +371,8 @@ impl<'a: 'b, 'b> FooterBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Footer<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Footer<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Footer");
         ds.field("version", &self.version());
         ds.field("schema", &self.schema());

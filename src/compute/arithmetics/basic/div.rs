@@ -1,5 +1,5 @@
 //! Definition of basic div operations with primitive arrays
-use std::ops::Div;
+use core::ops::Div;
 
 use num::{CheckedDiv, Zero};
 

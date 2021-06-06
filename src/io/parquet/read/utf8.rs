@@ -45,7 +45,7 @@ pub(crate) fn read_dict_buffer<O: Offset>(
         match run {
             hybrid_rle::HybridEncoded::Bitpacked(packed) => {
                 let remaining = length - values.len();
-                let len = std::cmp::min(packed.len() * 8, remaining);
+                let len = core::cmp::min(packed.len() * 8, remaining);
                 for is_valid in BitmapIter::new(packed, 0, len) {
                     validity.push(is_valid);
                     if is_valid {
@@ -101,7 +101,7 @@ pub(crate) fn read_optional<O: Offset>(
             hybrid_rle::HybridEncoded::Bitpacked(packed) => {
                 // the pack may contain more items than needed.
                 let remaining = length - values.len();
-                let len = std::cmp::min(packed.len() * 8, remaining);
+                let len = core::cmp::min(packed.len() * 8, remaining);
                 for is_valid in BitmapIter::new(packed, 0, len) {
                     validity.push(is_valid);
                     if is_valid {
@@ -152,7 +152,7 @@ where
     ArrowError: From<E>,
     E: Clone,
     O: Offset,
-    I: StreamingIterator<Item = std::result::Result<Page, E>>,
+    I: StreamingIterator<Item = core::result::Result<Page, E>>,
 {
     let capacity = metadata.num_values() as usize;
     let mut values = MutableBuffer::<u8>::with_capacity(0);

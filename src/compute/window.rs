@@ -24,7 +24,7 @@ use crate::{
     array::{new_null_array, Array},
     error::{ArrowError, Result},
 };
-
+use alloc::boxed::Box;
 /// Shifts array by defined number of items (to left or right)
 /// A positive value for `offset` shifts the array to the right
 /// a negative value shifts the array to the left.

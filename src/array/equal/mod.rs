@@ -1,10 +1,10 @@
-use std::unimplemented;
-
+use core::unimplemented;
 use crate::{
     bitmap::Bitmap,
     datatypes::{DataType, IntervalUnit},
     types::{days_ms, NativeType},
 };
+use alloc::vec::Vec;
 
 use super::{
     primitive::PrimitiveArray, Array, BinaryArray, BooleanArray, DictionaryArray, DictionaryKey,
@@ -623,7 +623,8 @@ pub fn equal(lhs: &dyn Array, rhs: &dyn Array) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use std::sync::Arc;
+    use alloc::sync::Arc;
+    use alloc::string::String;
 
     use crate::array::{BooleanArray, Int16Array, Int32Array, Offset};
 

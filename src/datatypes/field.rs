@@ -15,8 +15,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use std::collections::BTreeMap;
-
+use alloc::collections::BTreeMap;
+use alloc::string::String;
 use crate::error::{ArrowError, Result};
 
 use super::DataType;
@@ -254,8 +254,8 @@ impl Field {
     }
 }
 
-impl std::fmt::Display for Field {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Display for Field {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         write!(f, "{:?}", self)
     }
 }

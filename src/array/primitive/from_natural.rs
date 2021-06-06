@@ -1,4 +1,4 @@
-use std::iter::FromIterator;
+use core::iter::FromIterator;
 
 use crate::{
     buffer::{Buffer, MutableBuffer},
@@ -15,7 +15,7 @@ impl<T: NativeType + NaturalDataType, P: AsRef<[Option<T>]>> From<P> for Primiti
     }
 }
 
-impl<T: NativeType + NaturalDataType, Ptr: std::borrow::Borrow<Option<T>>> FromIterator<Ptr>
+impl<T: NativeType + NaturalDataType, Ptr: core::borrow::Borrow<Option<T>>> FromIterator<Ptr>
     for PrimitiveArray<T>
 {
     fn from_iter<I: IntoIterator<Item = Ptr>>(iter: I) -> Self {
@@ -55,7 +55,7 @@ mod tests {
     use crate::array::Array;
 
     use super::*;
-    use std::iter::FromIterator;
+    use core::iter::FromIterator;
 
     #[test]
     fn bla() {

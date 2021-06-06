@@ -1,8 +1,7 @@
-use std::sync::Arc;
-use std::{
-    collections::hash_map::DefaultHasher,
-    hash::{Hash, Hasher},
-};
+use alloc::sync::Arc;
+use hashbrown::hash_map::DefaultHashBuilder;
+use alloc::boxed::Box;
+use core::hash::{Hash, Hasher};
 
 use hash_hasher::HashedMap;
 
@@ -15,20 +14,20 @@ use crate::{
 use super::{DictionaryArray, DictionaryKey};
 
 #[derive(Debug)]
-pub struct DictionaryPrimitive<K: DictionaryKey, B: Builder<T>, T: Hash> {
+pub struct DictionaryPrimitive<K: DictionaryKey, B: Builder<T>, T: Hash, H: Hasher + Default = ahash::AHasher> {
     keys: Primitive<K>,
     map: HashedMap<u64, K>,
     values: B,
-    phantom: std::marker::PhantomData<T>,
+    phantom: core::marker::PhantomData<T>,
 }
 
-impl<K: DictionaryKey, B: Builder<T>, T: Hash> DictionaryPrimitive<K, B, T> {
+impl<K: DictionaryKey, B: Builder<T>, T: Hash, H: Hasher + Default> DictionaryPrimitive<K, B, T, H> {
     fn with_capacity(capacity: usize) -> Self {
         Self {
             keys: Primitive::<K>::with_capacity(capacity),
             values: B::with_capacity(0),
             map: HashedMap::<u64, K>::default(),
-            phantom: std::marker::PhantomData,
+            phantom: core::marker::PhantomData,
         }
     }
 }
@@ -69,11 +68,12 @@ where
     }
 }
 
-impl<K, B, T> TryFromIterator<Option<T>> for DictionaryPrimitive<K, B, T>
+impl<K, B, T, H> TryFromIterator<Option<T>> for DictionaryPrimitive<K, B, T, H>
 where
     K: DictionaryKey,
     B: Builder<T>,
     T: Hash,
+    H: Hasher + Default
 {
     fn try_from_iter<I: IntoIterator<Item = Result<Option<T>>>>(iter: I) -> Result<Self> {
         let iterator = iter.into_iter();
@@ -86,11 +86,12 @@ where
     }
 }
 
-impl<K, T, B> Builder<T> for DictionaryPrimitive<K, B, T>
+impl<K, T, B, H> Builder<T> for DictionaryPrimitive<K, B, T, H>
 where
     K: DictionaryKey,
     B: Builder<T>,
     T: Hash,
+    H: Hasher + Default,
 {
     fn with_capacity(capacity: usize) -> Self {
         Self::with_capacity(capacity)
@@ -100,7 +101,7 @@ where
     fn try_push(&mut self, value: Option<T>) -> Result<()> {
         match value {
             Some(v) => {
-                let mut hasher = DefaultHasher::new();
+                let mut hasher = H::default();
                 v.hash(&mut hasher);
                 let hash = hasher.finish();
                 match self.map.get(&hash) {

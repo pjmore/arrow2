@@ -1,6 +1,7 @@
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::{array::Array, ffi};
+use alloc::vec::Vec;
 
 use crate::error::Result;
 
@@ -8,7 +9,7 @@ use crate::error::Result;
 /// [C data interface](https://arrow.apache.org/docs/format/CDataInterface.html) (FFI).
 pub unsafe trait ToFfi {
     /// The pointers to the buffers.
-    fn buffers(&self) -> Vec<Option<std::ptr::NonNull<u8>>>;
+    fn buffers(&self) -> Vec<Option<core::ptr::NonNull<u8>>>;
 
     /// The offset
     fn offset(&self) -> usize;

@@ -1,7 +1,8 @@
 use crate::{bitmap::Bitmap, datatypes::DataType};
 
 use super::{ffi::ToFfi, Array};
-
+use alloc::vec::Vec;
+use alloc::boxed::Box;
 /// The concrete [`Array`] of [`DataType::Null`].
 #[derive(Debug, Clone)]
 pub struct NullArray {
@@ -39,7 +40,7 @@ impl NullArray {
 
 impl Array for NullArray {
     #[inline]
-    fn as_any(&self) -> &dyn std::any::Any {
+    fn as_any(&self) -> &dyn core::any::Any {
         self
     }
 
@@ -62,14 +63,14 @@ impl Array for NullArray {
     }
 }
 
-impl std::fmt::Display for NullArray {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for NullArray {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "NullArray({})", self.len())
     }
 }
 
 unsafe impl ToFfi for NullArray {
-    fn buffers(&self) -> Vec<Option<std::ptr::NonNull<u8>>> {
+    fn buffers(&self) -> Vec<Option<core::ptr::NonNull<u8>>> {
         vec![]
     }
 

@@ -8,10 +8,11 @@
 //! * [`IntervalUnit`]
 mod field;
 mod schema;
-
+use alloc::vec::Vec;
+use alloc::string::String;
 pub use field::Field;
 pub use schema::Schema;
-
+use alloc::boxed::Box;
 /// The set of datatypes that are supported by this implementation of Apache Arrow.
 ///
 /// The Arrow specification on data types includes some more types.
@@ -122,8 +123,8 @@ pub enum DataType {
     Decimal(usize, usize),
 }
 
-impl std::fmt::Display for DataType {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Display for DataType {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         write!(f, "{:?}", self)
     }
 }

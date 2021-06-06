@@ -1,5 +1,5 @@
 use crate::{bitmap::Bitmap, buffer::Buffer, datatypes::DataType};
-
+use alloc::boxed::Box;
 use super::{
     display_fmt,
     specification::{check_offsets, check_offsets_and_utf8},
@@ -11,7 +11,7 @@ use super::{
 /// The size of this struct is `O(1)` as all data is stored behind an `Arc`.
 /// # Example
 /// ```
-/// use std::iter::FromIterator;
+/// use core::iter::FromIterator;
 /// use arrow2::array::Utf8Array;
 /// # fn main() {
 /// let data = vec![Some("hello"), None, Some("hello2")];
@@ -103,8 +103,8 @@ impl<O: Offset> Utf8Array<O> {
         let offset = offset.to_usize().unwrap();
 
         // Soundness: `from_data` verifies that each slot is utf8 and offsets are built correctly.
-        let slice = std::slice::from_raw_parts(self.values.as_ptr().add(offset), length);
-        std::str::from_utf8_unchecked(slice)
+        let slice = core::slice::from_raw_parts(self.values.as_ptr().add(offset), length);
+        core::str::from_utf8_unchecked(slice)
     }
 
     /// Returns a slice of this [`Utf8Array`].
@@ -135,7 +135,7 @@ impl<O: Offset> Utf8Array<O> {
 
         let slice = &self.values.as_slice()[offset..offset + length];
         // todo: validate utf8 so that we can use the unsafe version
-        std::str::from_utf8(slice).unwrap()
+        core::str::from_utf8(slice).unwrap()
     }
 
     /// Returns the offsets of this [`Utf8Array`].
@@ -165,7 +165,7 @@ impl<O: Offset> Utf8Array<O> {
 
 impl<O: Offset> Array for Utf8Array<O> {
     #[inline]
-    fn as_any(&self) -> &dyn std::any::Any {
+    fn as_any(&self) -> &dyn core::any::Any {
         self
     }
 
@@ -188,8 +188,8 @@ impl<O: Offset> Array for Utf8Array<O> {
     }
 }
 
-impl<O: Offset> std::fmt::Display for Utf8Array<O> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl<O: Offset> core::fmt::Display for Utf8Array<O> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         display_fmt(self.iter(), &format!("{}", self.data_type()), f, false)
     }
 }
@@ -215,7 +215,7 @@ pub use iterator::*;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::iter::FromIterator;
+    use core::iter::FromIterator;
 
     #[test]
     fn basics() {

@@ -1,6 +1,6 @@
-use std::sync::Arc;
-use std::{convert::AsRef, usize};
-use std::{fmt::Debug, iter::FromIterator};
+use alloc::sync::Arc;
+use core::{convert::AsRef, usize};
+use core::{fmt::Debug, iter::FromIterator};
 
 use crate::{trusted_len::TrustedLen, types::NativeType};
 
@@ -111,9 +111,9 @@ impl<T: NativeType> Buffer<T> {
     /// This method assumes that the iterator's size is correct and is undefined behavior
     /// to use it on an iterator that reports an incorrect length.
     #[inline]
-    pub fn try_from_trusted_len_iter<E, I: TrustedLen<Item = std::result::Result<T, E>>>(
+    pub fn try_from_trusted_len_iter<E, I: TrustedLen<Item = core::result::Result<T, E>>>(
         iterator: I,
-    ) -> std::result::Result<Self, E> {
+    ) -> core::result::Result<Self, E> {
         Ok(MutableBuffer::try_from_trusted_len_iter(iterator)?.into())
     }
 
@@ -132,10 +132,10 @@ impl<T: NativeType> Buffer<T> {
     #[inline]
     pub unsafe fn try_from_trusted_len_iter_unchecked<
         E,
-        I: Iterator<Item = std::result::Result<T, E>>,
+        I: Iterator<Item = core::result::Result<T, E>>,
     >(
         iterator: I,
-    ) -> std::result::Result<Self, E> {
+    ) -> core::result::Result<Self, E> {
         Ok(MutableBuffer::try_from_trusted_len_iter_unchecked(iterator)?.into())
     }
 }
@@ -162,7 +162,7 @@ impl<T: NativeType> FromIterator<T> for Buffer<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-
+    use alloc::string::String;
     #[test]
     fn test_new() {
         let buffer = Buffer::<i32>::new();

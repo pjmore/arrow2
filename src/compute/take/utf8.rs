@@ -46,6 +46,7 @@ mod tests {
     use crate::array::Int32Array;
 
     use super::*;
+    use alloc::vec::Vec;
 
     fn _all_cases<O: Offset>() -> Vec<(Int32Array, Utf8Array<O>, Utf8Array<O>)> {
         vec![

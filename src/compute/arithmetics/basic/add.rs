@@ -1,5 +1,5 @@
 //! Definition of basic add operations with primitive arrays
-use std::ops::Add;
+use core::ops::Add;
 
 use num::{
     traits::{ops::overflowing::OverflowingAdd, SaturatingAdd},

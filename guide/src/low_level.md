@@ -51,7 +51,7 @@ The following demonstrates how to efficiently
 perform an operation from an iterator of [TrustedLen](https://doc.rust-lang.org/std/iter/trait.TrustedLen.html):
 
 ```rust
-# use std::iter::FromIterator;
+# use core::iter::FromIterator;
 # use arrow2::buffer::{Buffer, MutableBuffer};
 # fn main() {
 let x = Buffer::from_iter((0..1000));

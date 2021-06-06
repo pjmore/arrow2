@@ -1,4 +1,5 @@
-use std::sync::Arc;
+use alloc::sync::Arc;
+use alloc::vec::Vec;
 
 use crate::{
     array::{Array, PrimitiveArray},
@@ -9,7 +10,7 @@ use crate::{
 };
 
 use super::{utils::extend_validity, Growable};
-
+use alloc::boxed::Box;
 /// Concrete [`Growable`] for the [`PrimitiveArray`].
 pub struct GrowablePrimitive<'a, T: NativeType> {
     data_type: DataType,
@@ -50,8 +51,8 @@ impl<'a, T: NativeType> GrowablePrimitive<'a, T> {
 
     #[inline]
     fn to(&mut self) -> PrimitiveArray<T> {
-        let validity = std::mem::take(&mut self.validity);
-        let values = std::mem::take(&mut self.values);
+        let validity = core::mem::take(&mut self.validity);
+        let values = core::mem::take(&mut self.values);
 
         PrimitiveArray::<T>::from_data(self.data_type.clone(), values.into(), validity.into())
     }

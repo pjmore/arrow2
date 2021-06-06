@@ -25,7 +25,7 @@ use crate::{
     datatypes::{DataType, IntervalUnit},
     error::{ArrowError, Result},
 };
-
+use alloc::boxed::Box;
 mod binary;
 mod boolean;
 mod dict;
@@ -192,7 +192,7 @@ fn maybe_usize<I: Offset>(index: I) -> Result<usize> {
 
 #[cfg(test)]
 mod tests {
-    use std::sync::Arc;
+    use alloc::sync::Arc;
 
     use crate::datatypes::Field;
     use crate::{

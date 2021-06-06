@@ -25,7 +25,7 @@ use crate::{
     array::{Array, BinaryArray, ListArray, PrimitiveArray, StructArray, Utf8Array},
     datatypes::{DataType, IntervalUnit},
 };
-
+use alloc::boxed::Box;
 /// Reads a valid `ffi` interface into a `Box<dyn Array>`
 /// # Errors
 /// If and only if:
@@ -82,7 +82,7 @@ mod tests {
     use super::*;
     use crate::array::*;
     use crate::{datatypes::DataType, error::Result, ffi};
-    use std::sync::Arc;
+    use alloc::sync::Arc;
 
     fn test_release(expected: impl Array + 'static) -> Result<()> {
         // create a `ArrowArray` from the data.

@@ -204,7 +204,7 @@ mod tests {
         // one row group
         // one column chunk
         // one page
-        let row_groups = std::iter::once(Result::Ok(std::iter::once(Ok(std::iter::once(
+        let row_groups = core::iter::once(Result::Ok(core::iter::once(Ok(core::iter::once(
             array.as_ref(),
         )
         .zip(parquet_schema.columns().to_vec().into_iter())

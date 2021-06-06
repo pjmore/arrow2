@@ -16,7 +16,7 @@
 // under the License.
 
 use crate::array::Array;
-
+use alloc::boxed::Box;
 /// Returns the array, taking only the number of elements specified
 ///
 /// Limit performs a zero-copy slice of the array, and is a convenience method on slice

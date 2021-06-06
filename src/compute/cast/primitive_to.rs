@@ -1,5 +1,5 @@
-use std::hash::Hash;
-
+use core::hash::Hash;
+use alloc::string::String;
 use crate::{
     array::*,
     bitmap::Bitmap,
@@ -9,7 +9,7 @@ use crate::{
     types::NativeType,
 };
 use crate::{error::Result, util::lexical_to_string};
-
+use alloc::boxed::Box;
 /// Returns a [`BooleanArray`] where every element is different from zero.
 /// Validity is preserved.
 pub fn primitive_to_boolean<T: NativeType>(from: &PrimitiveArray<T>) -> BooleanArray {
@@ -173,9 +173,9 @@ pub fn timestamp_to_date64(
     // math rounding down to zero
 
     match to_size.cmp(&from_size) {
-        std::cmp::Ordering::Less => unary(from, |x| (x / (from_size / to_size)), to_type),
-        std::cmp::Ordering::Equal => primitive_to_same_primitive(from, &to_type),
-        std::cmp::Ordering::Greater => unary(from, |x| (x * (to_size / from_size)), to_type),
+        core::cmp::Ordering::Less => unary(from, |x| (x / (from_size / to_size)), to_type),
+        core::cmp::Ordering::Equal => primitive_to_same_primitive(from, &to_type),
+        core::cmp::Ordering::Greater => unary(from, |x| (x * (to_size / from_size)), to_type),
     }
 }
 

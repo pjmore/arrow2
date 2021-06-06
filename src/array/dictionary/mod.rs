@@ -1,5 +1,6 @@
-use std::sync::Arc;
-
+use alloc::sync::Arc;
+use alloc::boxed::Box;
+use alloc::vec::Vec;
 use crate::{
     bitmap::Bitmap,
     datatypes::DataType,
@@ -100,7 +101,7 @@ impl<K: DictionaryKey> DictionaryArray<K> {
 
 impl<K: DictionaryKey> Array for DictionaryArray<K> {
     #[inline]
-    fn as_any(&self) -> &dyn std::any::Any {
+    fn as_any(&self) -> &dyn core::any::Any {
         self
     }
 
@@ -123,11 +124,11 @@ impl<K: DictionaryKey> Array for DictionaryArray<K> {
     }
 }
 
-impl<K: DictionaryKey> std::fmt::Display for DictionaryArray<K>
+impl<K: DictionaryKey> core::fmt::Display for DictionaryArray<K>
 where
-    PrimitiveArray<K>: std::fmt::Display,
+    PrimitiveArray<K>: core::fmt::Display,
 {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         writeln!(f, "{:?}{{", self.data_type())?;
         writeln!(f, "keys: {},", self.keys())?;
         writeln!(f, "values: {},", self.values())?;
@@ -136,7 +137,7 @@ where
 }
 
 unsafe impl<K: DictionaryKey> ToFfi for DictionaryArray<K> {
-    fn buffers(&self) -> Vec<Option<std::ptr::NonNull<u8>>> {
+    fn buffers(&self) -> Vec<Option<core::ptr::NonNull<u8>>> {
         vec![self.keys.validity().as_ref().map(|x| x.as_ptr())]
     }
 

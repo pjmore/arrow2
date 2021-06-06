@@ -1,8 +1,8 @@
 //! Defines [`ArrowError`], representing all errors returned by this crate.
-use std::fmt::{Debug, Display, Formatter};
-
-use std::error::Error;
-
+use core::fmt::{Debug, Display, Formatter};
+use alloc::boxed::Box;
+pub trait Error: core::fmt::Debug + core::fmt::Display{}
+use alloc::string::String;
 /// Enum with all errors in this crate.
 #[derive(Debug)]
 pub enum ArrowError {
@@ -11,7 +11,8 @@ pub enum ArrowError {
     /// Triggered by an external error, such as CSV, serde, chrono.
     External(String, Box<dyn Error + Send + Sync>),
     Schema(String),
-    Io(std::io::Error),
+    //TODO Conditionally compile this error
+    //Io(std::io::Error),
     InvalidArgumentError(String),
     /// Error during import or export to/from C Data Interface
     Ffi(String),
@@ -28,25 +29,27 @@ pub enum ArrowError {
 
 impl ArrowError {
     /// Wraps an external error in an `ArrowError`.
-    pub fn from_external_error(error: impl std::error::Error + Send + Sync + 'static) -> Self {
+    pub fn from_external_error(error: impl Error + Send + Sync + 'static) -> Self {
         Self::External("".to_string(), Box::new(error))
     }
 }
-
+/*
+TODO: STD feature to allow this to compile when it is used by the normal rust code 
 impl From<::std::io::Error> for ArrowError {
     fn from(error: std::io::Error) -> Self {
         ArrowError::Io(error)
     }
 }
+*/
 
-impl From<std::str::Utf8Error> for ArrowError {
-    fn from(error: std::str::Utf8Error) -> Self {
+impl From<core::str::Utf8Error> for ArrowError {
+    fn from(error: core::str::Utf8Error) -> Self {
         ArrowError::External("".to_string(), Box::new(error))
     }
 }
 
 impl Display for ArrowError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
         match self {
             ArrowError::NotYetImplemented(source) => {
                 write!(f, "Not yet implemented: {}", &source)
@@ -83,4 +86,4 @@ impl Display for ArrowError {
 
 impl Error for ArrowError {}
 
-pub type Result<T> = std::result::Result<T, ArrowError>;
+pub type Result<T> = core::result::Result<T, ArrowError>;

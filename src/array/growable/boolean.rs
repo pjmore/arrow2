@@ -1,10 +1,11 @@
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::{
     array::{Array, BooleanArray},
     bitmap::MutableBitmap,
 };
-
+use alloc::vec::Vec;
+use alloc::boxed::Box;
 use super::{
     utils::{build_extend_null_bits, ExtendNullBits},
     Growable,
@@ -49,8 +50,8 @@ impl<'a> GrowableBoolean<'a> {
     }
 
     fn to(&mut self) -> BooleanArray {
-        let validity = std::mem::take(&mut self.validity);
-        let values = std::mem::take(&mut self.values);
+        let validity = core::mem::take(&mut self.validity);
+        let values = core::mem::take(&mut self.values);
 
         BooleanArray::from_data(values.into(), validity.into())
     }

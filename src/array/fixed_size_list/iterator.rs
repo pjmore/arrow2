@@ -1,7 +1,7 @@
 use crate::array::{list::ListIter, Array, IterableListArray};
 
 use super::FixedSizeListArray;
-
+use alloc::boxed::Box;
 impl IterableListArray for FixedSizeListArray {
     fn value(&self, i: usize) -> Box<dyn Array> {
         FixedSizeListArray::value(self, i)

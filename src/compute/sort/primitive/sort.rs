@@ -27,7 +27,7 @@ use super::super::SortOptions;
 fn sort_inner<T, F>(values: &mut [T], mut cmp: F, descending: bool)
 where
     T: NativeType,
-    F: FnMut(&T, &T) -> std::cmp::Ordering,
+    F: FnMut(&T, &T) -> core::cmp::Ordering,
 {
     if descending {
         values.sort_unstable_by(|x, y| cmp(x, y).reverse());
@@ -40,7 +40,7 @@ where
 pub fn sort_by<T, F>(array: &PrimitiveArray<T>, cmp: F, options: &SortOptions) -> PrimitiveArray<T>
 where
     T: NativeType,
-    F: FnMut(&T, &T) -> std::cmp::Ordering,
+    F: FnMut(&T, &T) -> core::cmp::Ordering,
 {
     let values = array.values();
     let validity = array.validity();
@@ -104,7 +104,7 @@ mod tests {
         options: SortOptions,
         expected_data: &[Option<T>],
     ) where
-        T: NativeType + std::cmp::Ord,
+        T: NativeType + core::cmp::Ord,
     {
         let input = Primitive::<T>::from(data).to(data_type.clone());
         let expected = Primitive::<T>::from(expected_data).to(data_type);

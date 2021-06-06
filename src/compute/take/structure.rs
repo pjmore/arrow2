@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::{
     array::{Array, Offset, PrimitiveArray, StructArray},
@@ -56,6 +56,7 @@ fn take_validity<I: Offset>(
 }
 
 pub fn take<I: Offset>(array: &StructArray, indices: &PrimitiveArray<I>) -> Result<StructArray> {
+    use alloc::vec::Vec;
     let values: Vec<Arc<dyn Array>> = array
         .values()
         .iter()

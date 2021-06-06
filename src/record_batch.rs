@@ -18,7 +18,8 @@
 //! A two-dimensional batch of column-oriented data with a defined
 //! [schema](crate::datatypes::Schema).
 
-use std::sync::Arc;
+use alloc::sync::Arc;
+use alloc::vec::Vec;
 
 use crate::array::*;
 use crate::datatypes::*;
@@ -56,7 +57,7 @@ impl RecordBatch {
     /// # Example
     ///
     /// ```
-    /// # use std::sync::Arc;
+    /// # use alloc::sync::Arc;
     /// # use arrow2::array::Primitive;
     /// # use arrow2::datatypes::{Schema, Field, DataType};
     /// # use arrow2::record_batch::RecordBatch;
@@ -175,7 +176,7 @@ impl RecordBatch {
     /// # Example
     ///
     /// ```
-    /// # use std::sync::Arc;
+    /// # use alloc::sync::Arc;
     /// # use arrow2::array::Primitive;
     /// # use arrow2::datatypes::{Schema, Field, DataType};
     /// # use arrow2::record_batch::RecordBatch;
@@ -204,7 +205,7 @@ impl RecordBatch {
     /// # Example
     ///
     /// ```
-    /// # use std::sync::Arc;
+    /// # use alloc::sync::Arc;
     /// # use arrow2::array::Primitive;
     /// # use arrow2::datatypes::{Schema, Field, DataType};
     /// # use arrow2::record_batch::RecordBatch;

@@ -5,7 +5,8 @@ use super::{display_fmt, display_helper, ffi::ToFfi, Array};
 mod from;
 mod iterator;
 pub use from::*;
-
+use alloc::vec::Vec;
+use alloc::boxed::Box;
 #[derive(Debug, Clone)]
 pub struct FixedSizeBinaryArray {
     size: i32, // this is redundant with `data_type`, but useful to not have to deconstruct the data_type.
@@ -76,7 +77,7 @@ impl FixedSizeBinaryArray {
     /// Assumes that the `i < self.len`.
     #[inline]
     pub unsafe fn value_unchecked(&self, i: usize) -> &[u8] {
-        std::slice::from_raw_parts(
+        core::slice::from_raw_parts(
             self.values.as_ptr().add(i * self.size as usize),
             self.size as usize,
         )
@@ -100,7 +101,7 @@ impl FixedSizeBinaryArray {
 
 impl Array for FixedSizeBinaryArray {
     #[inline]
-    fn as_any(&self) -> &dyn std::any::Any {
+    fn as_any(&self) -> &dyn core::any::Any {
         self
     }
 
@@ -123,8 +124,8 @@ impl Array for FixedSizeBinaryArray {
     }
 }
 
-impl std::fmt::Display for FixedSizeBinaryArray {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for FixedSizeBinaryArray {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let a = |x: &[u8]| display_helper(x.iter().map(|x| Some(format!("{:b}", x)))).join(" ");
         let iter = self.iter().map(|x| x.map(a));
         display_fmt(iter, "FixedSizeBinaryArray", f, false)
@@ -132,11 +133,11 @@ impl std::fmt::Display for FixedSizeBinaryArray {
 }
 
 unsafe impl ToFfi for FixedSizeBinaryArray {
-    fn buffers(&self) -> Vec<Option<std::ptr::NonNull<u8>>> {
+    fn buffers(&self) -> Vec<Option<core::ptr::NonNull<u8>>> {
         unsafe {
             vec![
                 self.validity.as_ref().map(|x| x.as_ptr()),
-                Some(std::ptr::NonNull::new_unchecked(
+                Some(core::ptr::NonNull::new_unchecked(
                     self.values.as_ptr() as *mut u8
                 )),
             ]

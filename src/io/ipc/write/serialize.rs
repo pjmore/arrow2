@@ -517,7 +517,7 @@ fn to_le_bytes_bitmap(bitmap: &Option<Bitmap>, length: usize) -> Vec<u8> {
         }
         None => {
             // in IPC, the null bitmap is always be present
-            let bitmap = Bitmap::from_trusted_len_iter(std::iter::repeat(true).take(length));
+            let bitmap = Bitmap::from_trusted_len_iter(core::iter::repeat(true).take(length));
             bitmap.as_slice().to_vec()
         }
     }

@@ -154,6 +154,7 @@ pub fn compare_scalar<O: Offset>(lhs: &Utf8Array<O>, rhs: &str, op: Operator) ->
 #[cfg(test)]
 mod tests {
     use super::*;
+    use alloc::vec::Vec;
 
     fn test_generic<O: Offset, F: Fn(&Utf8Array<O>, &Utf8Array<O>) -> Result<BooleanArray>>(
         lhs: Vec<&str>,

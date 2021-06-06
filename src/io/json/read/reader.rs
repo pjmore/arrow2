@@ -16,7 +16,7 @@
 // under the License.
 
 use std::io::{BufReader, Read, Seek};
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use serde_json::Value;
 
@@ -130,7 +130,7 @@ impl Decoder {
 /// Example:
 ///
 /// ```
-/// use std::sync::Arc;
+/// use alloc::sync::Arc;
 /// use arrow2::datatypes::{DataType, Field, Schema};
 /// use arrow2::io::json;
 /// use std::fs::File;

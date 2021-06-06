@@ -1,4 +1,4 @@
-use std::convert::TryFrom;
+use core::convert::TryFrom;
 
 use crate::datatypes::DataType;
 use parquet2::schema::types::ParquetType;
@@ -57,12 +57,12 @@ impl TryFrom<&ParquetByteArrayStatistics> for Utf8Statistics {
             min_value: stats
                 .min_value
                 .as_ref()
-                .map(|x| std::str::from_utf8(&x).map(|x| x.to_string()))
+                .map(|x| core::str::from_utf8(&x).map(|x| x.to_string()))
                 .transpose()?,
             max_value: stats
                 .max_value
                 .as_ref()
-                .map(|x| std::str::from_utf8(&x).map(|x| x.to_string()))
+                .map(|x| core::str::from_utf8(&x).map(|x| x.to_string()))
                 .transpose()?,
         })
     }

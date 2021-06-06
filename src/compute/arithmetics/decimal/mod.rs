@@ -50,7 +50,7 @@ fn adjusted_precision_scale(
     let lhs_digits_before = lhs_p - lhs_s;
     let rhs_digits_before = rhs_p - rhs_s;
 
-    let res_digits_before = std::cmp::max(lhs_digits_before, rhs_digits_before);
+    let res_digits_before = core::cmp::max(lhs_digits_before, rhs_digits_before);
 
     let (res_s, diff) = if lhs_s > rhs_s {
         (lhs_s, lhs_s - rhs_s)

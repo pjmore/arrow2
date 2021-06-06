@@ -1,7 +1,7 @@
 use crossbeam_channel::unbounded;
 
 use std::fs::File;
-use std::sync::Arc;
+use alloc::sync::Arc;
 use std::thread;
 use std::time::SystemTime;
 

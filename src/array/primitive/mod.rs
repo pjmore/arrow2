@@ -1,11 +1,11 @@
 use crate::{bitmap::Bitmap, buffer::Buffer, datatypes::*, error::ArrowError, types::NativeType};
 
 use super::Array;
-
+use alloc::boxed::Box;
 /// A [`PrimitiveArray`] is arrow's equivalent to `Vec<Option<T: NativeType>>`, i.e.
 /// an array designed for highly performant operations on optionally nullable slots,
 /// backed by a physical type of a physical byte-width, such as `i32` or `f64`.
-/// The size of this struct is `O(1)` as all data is stored behind an [`std::sync::Arc`].
+/// The size of this struct is `O(1)` as all data is stored behind an [`alloc::sync::Arc`].
 #[derive(Debug, Clone)]
 pub struct PrimitiveArray<T: NativeType> {
     data_type: DataType,
@@ -39,7 +39,7 @@ impl<T: NativeType> PrimitiveArray<T> {
         if !T::is_valid(&data_type) {
             Err(ArrowError::InvalidArgumentError(format!(
                 "Type {} does not support logical type {}",
-                std::any::type_name::<T>(),
+                core::any::type_name::<T>(),
                 data_type
             )))
             .unwrap()
@@ -93,7 +93,7 @@ impl<T: NativeType> PrimitiveArray<T> {
 
 impl<T: NativeType> Array for PrimitiveArray<T> {
     #[inline]
-    fn as_any(&self) -> &dyn std::any::Any {
+    fn as_any(&self) -> &dyn core::any::Any {
         self
     }
 
@@ -128,7 +128,7 @@ pub use iterator::*;
 mod tests {
     use super::*;
     use crate::array::Int32Array;
-    use std::iter::FromIterator;
+    use core::iter::FromIterator;
 
     #[test]
     fn basics() {

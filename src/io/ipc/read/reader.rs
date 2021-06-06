@@ -16,7 +16,7 @@
 // under the License.
 
 use std::io::{Read, Seek, SeekFrom};
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::array::*;
 use crate::datatypes::Schema;
@@ -62,7 +62,7 @@ impl FileMetadata {
 
 /// Arrow File reader
 #[derive(Debug)]
-pub struct FileReader<R: Read + Seek + std::fmt::Debug> {
+pub struct FileReader<R: Read + Seek + core::fmt::Debug> {
     reader: R,
     metadata: FileMetadata,
     current_block: usize,
@@ -219,7 +219,7 @@ pub fn read_batch<R: Read + Seek>(
     }
 }
 
-impl<R: Read + Seek + std::fmt::Debug> FileReader<R> {
+impl<R: Read + Seek + core::fmt::Debug> FileReader<R> {
     /// Creates a new reader
     pub fn new(reader: R, metadata: FileMetadata) -> Self {
         Self {
@@ -235,7 +235,7 @@ impl<R: Read + Seek + std::fmt::Debug> FileReader<R> {
     }
 }
 
-impl<R: Read + Seek + std::fmt::Debug> Iterator for FileReader<R> {
+impl<R: Read + Seek + core::fmt::Debug> Iterator for FileReader<R> {
     type Item = Result<RecordBatch>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -250,7 +250,7 @@ impl<R: Read + Seek + std::fmt::Debug> Iterator for FileReader<R> {
     }
 }
 
-impl<R: Read + Seek + std::fmt::Debug> RecordBatchReader for FileReader<R> {
+impl<R: Read + Seek + core::fmt::Debug> RecordBatchReader for FileReader<R> {
     fn schema(&self) -> &Schema {
         &self.metadata.schema
     }

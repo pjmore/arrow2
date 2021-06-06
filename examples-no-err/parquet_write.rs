@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::iter::once;
+use core::iter::once;
 
 use arrow2::io::parquet::write::to_parquet_schema;
 use arrow2::{

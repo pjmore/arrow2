@@ -3,7 +3,7 @@ use crate::{bitmap::Bitmap, trusted_len::TrustedLen};
 /// Iterator of Option<T> from an iterator and validity.
 pub struct ZipValidity<'a, T, I: Iterator<Item = T>> {
     values: I,
-    validity_iter: std::slice::Iter<'a, u8>,
+    validity_iter: core::slice::Iter<'a, u8>,
     has_validity: bool,
     current_byte: &'a u8,
     validity_len: usize,
@@ -82,7 +82,7 @@ impl<'a, T, I: Iterator<Item = T>> Iterator for ZipValidity<'a, T, I> {
 }
 
 /// all arrays have known size.
-impl<'a, T, I: Iterator<Item = T>> std::iter::ExactSizeIterator for ZipValidity<'a, T, I> {}
+impl<'a, T, I: Iterator<Item = T>> core::iter::ExactSizeIterator for ZipValidity<'a, T, I> {}
 
 unsafe impl<T, I: TrustedLen<Item = T>> TrustedLen for ZipValidity<'_, T, I> {}
 
@@ -97,11 +97,12 @@ pub fn zip_validity<T, I: Iterator<Item = T>>(
 
 #[cfg(test)]
 mod tests {
-    use std::iter::FromIterator;
+    use core::iter::FromIterator;
 
     use crate::bitmap::MutableBitmap;
 
     use super::*;
+    use alloc::vec::Vec;
 
     #[test]
     fn basic() {

@@ -15,11 +15,11 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use std::collections::HashMap;
-
+use hashbrown::HashMap;
 use crate::error::{ArrowError, Result};
-
+use alloc::string::String;
 use super::Field;
+use alloc::vec::Vec;
 
 /// An ordered sequence of [`Field`] with optional metadata.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -60,7 +60,7 @@ impl Schema {
     ///
     /// ```
     /// # use arrow2::datatypes::{Field, DataType, Schema};
-    /// # use std::collections::HashMap;
+    /// # use hashbrown::HashMap;;
     /// let field_a = Field::new("a", DataType::Int64, false);
     /// let field_b = Field::new("b", DataType::Boolean, false);
     ///
@@ -193,8 +193,8 @@ impl Schema {
     }
 }
 
-impl std::fmt::Display for Schema {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Display for Schema {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.write_str(
             &self
                 .fields

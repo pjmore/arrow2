@@ -2,7 +2,7 @@ use crate::array::{Array, IterableListArray};
 use crate::{array::Offset, trusted_len::TrustedLen};
 
 use super::ListArray;
-
+use alloc::boxed::Box;
 impl<O: Offset> IterableListArray for ListArray<O> {
     fn value(&self, i: usize) -> Box<dyn Array> {
         ListArray::<O>::value(self, i)
@@ -47,7 +47,7 @@ impl<'a, A: IterableListArray> ListIter<'a, A> {
     }
 }
 
-impl<'a, A: IterableListArray> std::iter::Iterator for ListIter<'a, A> {
+impl<'a, A: IterableListArray> core::iter::Iterator for ListIter<'a, A> {
     type Item = Option<Box<dyn Array>>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -69,6 +69,6 @@ impl<'a, A: IterableListArray> std::iter::Iterator for ListIter<'a, A> {
 }
 
 /// all arrays have known size.
-impl<'a, A: IterableListArray> std::iter::ExactSizeIterator for ListIter<'a, A> {}
+impl<'a, A: IterableListArray> core::iter::ExactSizeIterator for ListIter<'a, A> {}
 
 unsafe impl<A: IterableListArray> TrustedLen for ListIter<'_, A> {}

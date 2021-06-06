@@ -22,7 +22,7 @@ use arrow_flight::{
 use tonic::{Request, Status};
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
-type Result<T = (), E = Error> = std::result::Result<T, E>;
+type Result<T = (), E = Error> = core::result::Result<T, E>;
 
 pub async fn run_scenario(host: &str, port: &str) -> Result {
     let url = format!("http://{}:{}", host, port);

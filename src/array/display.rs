@@ -4,7 +4,9 @@ use crate::{
     error::{ArrowError, Result},
     temporal_conversions,
 };
-
+use alloc::boxed::Box;
+use alloc::string::String;
+use alloc::vec::Vec;
 macro_rules! dyn_display {
     ($array:expr, $ty:ty, $expr:expr) => {{
         let a = $array.as_any().downcast_ref::<$ty>().unwrap();

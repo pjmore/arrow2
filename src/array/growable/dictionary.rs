@@ -1,11 +1,12 @@
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::{
     array::{Array, DictionaryArray, DictionaryKey, PrimitiveArray},
     bitmap::{Bitmap, MutableBitmap},
     buffer::MutableBuffer,
 };
-
+use alloc::vec::Vec;
+use alloc::boxed::Box;
 use super::{make_growable, utils::extend_validity, Growable};
 
 /// Concrete [`Growable`] for the [`DictionaryArray`].
@@ -73,8 +74,8 @@ impl<'a, T: DictionaryKey> GrowableDictionary<'a, T> {
 
     #[inline]
     fn to(&mut self) -> DictionaryArray<T> {
-        let validity = std::mem::take(&mut self.key_validity);
-        let values = std::mem::take(&mut self.key_values);
+        let validity = core::mem::take(&mut self.key_validity);
+        let values = core::mem::take(&mut self.key_values);
 
         let keys = PrimitiveArray::<T>::from_data(T::DATA_TYPE, values.into(), validity.into());
 

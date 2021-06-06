@@ -1,8 +1,5 @@
-use std::{
-    fmt::Binary,
-    ops::{BitAnd, BitAndAssign, BitOr, Not, Shl, ShlAssign, ShrAssign},
-};
-
+use core::fmt::Binary;
+use core::ops::{BitAnd, BitAndAssign, BitOr, Not, Shl, ShlAssign, ShrAssign};
 /// Something that can be use as a chunk of bits. This is used to create masks of a given number
 /// of lengths, whose width is `1`. In `simd_packed` notation, this corresponds to `m1xY`.
 /// # Safety
@@ -10,7 +7,7 @@ use std::{
 pub unsafe trait BitChunk:
     Sized
     + Copy
-    + std::fmt::Debug
+    + core::fmt::Debug
     + Binary
     + BitAnd<Output = Self>
     + ShlAssign
@@ -22,10 +19,10 @@ pub unsafe trait BitChunk:
     + BitAndAssign
     + BitOr<Output = Self>
 {
-    type Bytes: std::ops::Index<usize, Output = u8>
-        + std::ops::IndexMut<usize, Output = u8>
-        + for<'a> std::convert::TryFrom<&'a [u8]>
-        + std::fmt::Debug;
+    type Bytes: core::ops::Index<usize, Output = u8>
+        + core::ops::IndexMut<usize, Output = u8>
+        + for<'a> core::convert::TryFrom<&'a [u8]>
+        + core::fmt::Debug;
 
     fn one() -> Self;
     fn zero() -> Self;
@@ -150,7 +147,7 @@ pub struct BitChunkIter<T: BitChunk> {
 impl<T: BitChunk> BitChunkIter<T> {
     #[inline]
     pub fn new(value: T, len: usize) -> Self {
-        assert!(len <= std::mem::size_of::<T>() * 8);
+        assert!(len <= core::mem::size_of::<T>() * 8);
         Self {
             value,
             remaining: len,
@@ -182,6 +179,7 @@ impl<T: BitChunk> Iterator for BitChunkIter<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use alloc::vec::Vec;
 
     #[test]
     fn test_basic1() {

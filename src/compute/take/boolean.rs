@@ -129,6 +129,7 @@ mod tests {
     use crate::array::Int32Array;
 
     use super::*;
+    use alloc::vec::Vec;
 
     fn _all_cases() -> Vec<(Int32Array, BooleanArray, BooleanArray)> {
         vec![

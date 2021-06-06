@@ -1,11 +1,12 @@
 //! This module contains an implementation of a contiguous immutable memory region that knows
 //! how to de-allocate itself, [`Bytes`].
 
-use std::slice;
-use std::{fmt::Debug, fmt::Formatter};
-use std::{ptr::NonNull, sync::Arc};
+use core::slice;
+use core::{fmt::Debug, fmt::Formatter};
+use alloc:: sync::Arc;
+use core::ptr::NonNull;
 
-use crate::alloc;
+use crate::arrow_alloc;
 use crate::ffi;
 use crate::types::NativeType;
 
@@ -18,7 +19,7 @@ pub enum Deallocation {
 }
 
 impl Debug for Deallocation {
-    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter) -> core::fmt::Result {
         match self {
             Deallocation::Native(capacity) => {
                 write!(f, "Deallocation::Native {{ capacity: {} }}", capacity)
@@ -61,7 +62,7 @@ impl<T: NativeType> Bytes<T> {
     /// This function is unsafe as there is no guarantee that the given pointer is valid for `len`
     /// bytes. If the `ptr` and `capacity` come from a `Buffer`, then this is guaranteed.
     #[inline]
-    pub unsafe fn new(ptr: std::ptr::NonNull<T>, len: usize, deallocation: Deallocation) -> Self {
+    pub unsafe fn new(ptr: core::ptr::NonNull<T>, len: usize, deallocation: Deallocation) -> Self {
         Self {
             ptr,
             len,
@@ -95,7 +96,7 @@ impl<T: NativeType> Drop for Bytes<T> {
     fn drop(&mut self) {
         match &self.deallocation {
             Deallocation::Native(capacity) => {
-                unsafe { alloc::free_aligned(self.ptr, *capacity) };
+                unsafe { arrow_alloc::free_aligned(self.ptr, *capacity) };
             }
             // foreign interface knows how to deallocate itself.
             Deallocation::Foreign(_) => (),
@@ -103,7 +104,7 @@ impl<T: NativeType> Drop for Bytes<T> {
     }
 }
 
-impl<T: NativeType> std::ops::Deref for Bytes<T> {
+impl<T: NativeType> core::ops::Deref for Bytes<T> {
     type Target = [T];
 
     fn deref(&self) -> &[T] {
@@ -118,7 +119,7 @@ impl<T: NativeType> PartialEq for Bytes<T> {
 }
 
 impl<T: NativeType> Debug for Bytes<T> {
-    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter) -> core::fmt::Result {
         write!(f, "Bytes {{ ptr: {:?}, len: {}, data: ", self.ptr, self.len,)?;
 
         f.debug_list().entries(self.iter()).finish()?;

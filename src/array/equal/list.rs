@@ -2,6 +2,7 @@ use crate::{
     array::{Array, ListArray, Offset},
     bitmap::Bitmap,
 };
+use alloc::vec::Vec;
 
 use super::{
     equal_range,

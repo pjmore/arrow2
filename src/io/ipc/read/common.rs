@@ -17,7 +17,7 @@
 
 use std::collections::{HashMap, VecDeque};
 use std::io::{Read, Seek};
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::array::*;
 use crate::datatypes::{DataType, Field, Schema};
@@ -47,7 +47,7 @@ pub fn read_record_batch<R: Read + Seek>(
     })?;
 
     // This is a bug fix: we should have one dictionary per node, not schema field
-    let dictionaries = dictionaries.iter().chain(std::iter::repeat(&None));
+    let dictionaries = dictionaries.iter().chain(core::iter::repeat(&None));
 
     let mut field_nodes = field_nodes
         .iter()

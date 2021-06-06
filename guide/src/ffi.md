@@ -19,7 +19,7 @@ Types currently not supported:
 The API to export an `Array` is as follows:
 
 ```rust
-use std::sync::Arc;
+use alloc::sync::Arc;
 use arrow2::array::{Array, Primitive};
 use arrow2::datatypes::DataType;
 use arrow2::ffi::ArrowArray;

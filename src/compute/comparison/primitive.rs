@@ -158,7 +158,7 @@ where
 /// Perform `left < right` operation on two arrays.
 pub fn lt<T>(lhs: &PrimitiveArray<T>, rhs: &PrimitiveArray<T>) -> Result<BooleanArray>
 where
-    T: NativeType + std::cmp::PartialOrd,
+    T: NativeType + core::cmp::PartialOrd,
 {
     compare_op(lhs, rhs, |a, b| a < b)
 }
@@ -166,7 +166,7 @@ where
 /// Perform `left < right` operation on an array and a scalar value.
 pub fn lt_scalar<T>(lhs: &PrimitiveArray<T>, rhs: T) -> Result<BooleanArray>
 where
-    T: NativeType + std::cmp::PartialOrd,
+    T: NativeType + core::cmp::PartialOrd,
 {
     compare_op_scalar(lhs, rhs, |a, b| a < b)
 }
@@ -174,7 +174,7 @@ where
 /// Perform `left <= right` operation on two arrays.
 pub fn lt_eq<T>(lhs: &PrimitiveArray<T>, rhs: &PrimitiveArray<T>) -> Result<BooleanArray>
 where
-    T: NativeType + std::cmp::PartialOrd,
+    T: NativeType + core::cmp::PartialOrd,
 {
     compare_op(lhs, rhs, |a, b| a <= b)
 }
@@ -183,7 +183,7 @@ where
 /// Null values are less than non-null values.
 pub fn lt_eq_scalar<T>(lhs: &PrimitiveArray<T>, rhs: T) -> Result<BooleanArray>
 where
-    T: NativeType + std::cmp::PartialOrd,
+    T: NativeType + core::cmp::PartialOrd,
 {
     compare_op_scalar(lhs, rhs, |a, b| a <= b)
 }
@@ -192,7 +192,7 @@ where
 /// values.
 pub fn gt<T>(lhs: &PrimitiveArray<T>, rhs: &PrimitiveArray<T>) -> Result<BooleanArray>
 where
-    T: NativeType + std::cmp::PartialOrd,
+    T: NativeType + core::cmp::PartialOrd,
 {
     compare_op(lhs, rhs, |a, b| a > b)
 }
@@ -201,7 +201,7 @@ where
 /// Non-null values are greater than null values.
 pub fn gt_scalar<T>(lhs: &PrimitiveArray<T>, rhs: T) -> Result<BooleanArray>
 where
-    T: NativeType + std::cmp::PartialOrd,
+    T: NativeType + core::cmp::PartialOrd,
 {
     compare_op_scalar(lhs, rhs, |a, b| a > b)
 }
@@ -210,7 +210,7 @@ where
 /// values.
 pub fn gt_eq<T>(lhs: &PrimitiveArray<T>, rhs: &PrimitiveArray<T>) -> Result<BooleanArray>
 where
-    T: NativeType + std::cmp::PartialOrd,
+    T: NativeType + core::cmp::PartialOrd,
 {
     compare_op(lhs, rhs, |a, b| a >= b)
 }
@@ -219,12 +219,12 @@ where
 /// Non-null values are greater than null values.
 pub fn gt_eq_scalar<T>(lhs: &PrimitiveArray<T>, rhs: T) -> Result<BooleanArray>
 where
-    T: NativeType + std::cmp::PartialOrd,
+    T: NativeType + core::cmp::PartialOrd,
 {
     compare_op_scalar(lhs, rhs, |a, b| a >= b)
 }
 
-pub fn compare<T: NativeType + std::cmp::PartialOrd>(
+pub fn compare<T: NativeType + core::cmp::PartialOrd>(
     lhs: &PrimitiveArray<T>,
     rhs: &PrimitiveArray<T>,
     op: Operator,
@@ -239,7 +239,7 @@ pub fn compare<T: NativeType + std::cmp::PartialOrd>(
     }
 }
 
-pub fn compare_scalar<T: NativeType + std::cmp::PartialOrd>(
+pub fn compare_scalar<T: NativeType + core::cmp::PartialOrd>(
     lhs: &PrimitiveArray<T>,
     rhs: T,
     op: Operator,

@@ -7,7 +7,7 @@
 //! represent chunks of bits (e.g. `u8`, `u16`), and [`BitChunkIter`], that can be used to
 //! iterate over bitmaps in [`BitChunk`]s.
 //! Finally, this module also contains traits used to compile code optimized for SIMD instructions at [`simd`].
-use std::{
+use core::{
     cmp::{Ord, Ordering},
     convert::TryFrom,
 };
@@ -55,8 +55,8 @@ pub unsafe trait NativeType:
     Relation
     + Sized
     + Copy
-    + std::fmt::Debug
-    + std::fmt::Display
+    + core::fmt::Debug
+    + core::fmt::Display
     + PartialEq
     + Default
     + Sized
@@ -74,7 +74,7 @@ pub unsafe trait NativeType:
 macro_rules! native {
     ($type:ty) => {
         unsafe impl NativeType for $type {
-            type Bytes = [u8; std::mem::size_of::<Self>()];
+            type Bytes = [u8; core::mem::size_of::<Self>()];
             #[inline]
             fn to_le_bytes(&self) -> Self::Bytes {
                 Self::to_le_bytes(*self)
@@ -151,8 +151,8 @@ create_relation!(f64, &DataType::Float64);
 #[allow(non_camel_case_types)]
 pub struct days_ms([i32; 2]);
 
-impl std::fmt::Display for days_ms {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for days_ms {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "{}d {}ms", self.days(), self.milliseconds())
     }
 }
@@ -236,7 +236,7 @@ impl Ord for days_ms {
 }
 
 impl PartialOrd for days_ms {
-    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> {
         Some(self.cmp(other))
     }
 }

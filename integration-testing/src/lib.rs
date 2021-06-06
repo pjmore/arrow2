@@ -17,7 +17,7 @@
 
 //! Common code used in the integration test binaries
 
-use std::convert::TryFrom;
+use core::convert::TryFrom;
 
 use serde_json::Value;
 
@@ -26,7 +26,7 @@ use arrow2::error::Result;
 use arrow2::io::json_integration::*;
 use arrow2::record_batch::RecordBatch;
 
-use std::collections::HashMap;
+use hashbrown::HashMap;;
 use std::fs::File;
 use std::io::BufReader;
 

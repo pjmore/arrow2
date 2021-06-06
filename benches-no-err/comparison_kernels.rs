@@ -32,7 +32,7 @@ where
 
 fn bench_op_scalar<T>(arr_a: &PrimitiveArray<T>, value_b: T, op: Operator)
 where
-    T: NativeType + std::cmp::PartialOrd,
+    T: NativeType + core::cmp::PartialOrd,
 {
     primtive_compare_scalar(
         criterion::black_box(arr_a),

@@ -2,13 +2,14 @@ use crate::{
     array::{FromFfi, ToFfi},
     ffi,
 };
+use alloc::vec::Vec;
 
 use crate::error::Result;
 
 use super::BooleanArray;
 
 unsafe impl ToFfi for BooleanArray {
-    fn buffers(&self) -> Vec<Option<std::ptr::NonNull<u8>>> {
+    fn buffers(&self) -> Vec<Option<core::ptr::NonNull<u8>>> {
         vec![
             self.validity.as_ref().map(|x| x.as_ptr()),
             Some(self.values.as_ptr()),

@@ -1,10 +1,11 @@
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::{
     bitmap::Bitmap,
     datatypes::{DataType, Field},
 };
-
+use alloc::vec::Vec;
+use alloc::boxed::Box;
 use super::{display_fmt, ffi::ToFfi, new_empty_array, new_null_array, Array};
 
 #[derive(Debug, Clone)]
@@ -91,7 +92,7 @@ impl FixedSizeListArray {
 
 impl Array for FixedSizeListArray {
     #[inline]
-    fn as_any(&self) -> &dyn std::any::Any {
+    fn as_any(&self) -> &dyn core::any::Any {
         self
     }
 
@@ -114,14 +115,14 @@ impl Array for FixedSizeListArray {
     }
 }
 
-impl std::fmt::Display for FixedSizeListArray {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for FixedSizeListArray {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         display_fmt(self.iter(), "FixedSizeListArray", f, true)
     }
 }
 
 unsafe impl ToFfi for FixedSizeListArray {
-    fn buffers(&self) -> Vec<Option<std::ptr::NonNull<u8>>> {
+    fn buffers(&self) -> Vec<Option<core::ptr::NonNull<u8>>> {
         vec![self.validity.as_ref().map(|x| x.as_ptr())]
     }
 

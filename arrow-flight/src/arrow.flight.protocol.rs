@@ -218,7 +218,7 @@ pub mod flight_service_client {
         #[doc = r" Attempt to create a new client by connecting to a given endpoint."]
         pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
         where
-            D: std::convert::TryInto<tonic::transport::Endpoint>,
+            D: core::convert::TryInto<tonic::transport::Endpoint>,
             D::Error: Into<StdError>,
         {
             let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
@@ -485,8 +485,8 @@ pub mod flight_service_client {
             }
         }
     }
-    impl<T> std::fmt::Debug for FlightServiceClient<T> {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    impl<T> core::fmt::Debug for FlightServiceClient<T> {
+        fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
             write!(f, "FlightServiceClient {{ ... }}")
         }
     }
@@ -1028,8 +1028,8 @@ pub mod flight_service_server {
             Self(self.0.clone(), self.1.clone())
         }
     }
-    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    impl<T: core::fmt::Debug> core::fmt::Debug for _Inner<T> {
+        fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
             write!(f, "{:?}", self.0)
         }
     }

@@ -133,8 +133,8 @@ impl<'a: 'b, 'b> TensorDimBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for TensorDim<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for TensorDim<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("TensorDim");
         ds.field("size_", &self.size_());
         ds.field("name", &self.name());
@@ -662,8 +662,8 @@ impl<'a: 'b, 'b> TensorBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Tensor<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Tensor<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Tensor");
         ds.field("type_type", &self.type_type());
         match self.type_type() {

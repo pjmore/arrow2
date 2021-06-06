@@ -23,7 +23,7 @@ use crate::{
     datatypes::DataType,
     error::{ArrowError, Result},
 };
-
+use alloc::boxed::Box;
 fn unary_offsets_string<O, F>(array: &Utf8Array<O>, op: F) -> PrimitiveArray<O>
 where
     O: Offset,

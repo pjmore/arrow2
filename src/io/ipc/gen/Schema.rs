@@ -82,8 +82,8 @@ impl MetadataVersion {
         }
     }
 }
-impl std::fmt::Debug for MetadataVersion {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for MetadataVersion {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -203,8 +203,8 @@ impl Feature {
         }
     }
 }
-impl std::fmt::Debug for Feature {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for Feature {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -291,8 +291,8 @@ impl UnionMode {
         }
     }
 }
-impl std::fmt::Debug for UnionMode {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for UnionMode {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -382,8 +382,8 @@ impl Precision {
         }
     }
 }
-impl std::fmt::Debug for Precision {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for Precision {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -470,8 +470,8 @@ impl DateUnit {
         }
     }
 }
-impl std::fmt::Debug for DateUnit {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for DateUnit {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -572,8 +572,8 @@ impl TimeUnit {
         }
     }
 }
-impl std::fmt::Debug for TimeUnit {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for TimeUnit {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -661,8 +661,8 @@ impl IntervalUnit {
         }
     }
 }
-impl std::fmt::Debug for IntervalUnit {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for IntervalUnit {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -838,8 +838,8 @@ impl Type {
         }
     }
 }
-impl std::fmt::Debug for Type {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for Type {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -930,8 +930,8 @@ impl DictionaryKind {
         }
     }
 }
-impl std::fmt::Debug for DictionaryKind {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for DictionaryKind {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -1020,8 +1020,8 @@ impl Endianness {
         }
     }
 }
-impl std::fmt::Debug for Endianness {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for Endianness {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         if let Some(name) = self.variant_name() {
             f.write_str(name)
         } else {
@@ -1077,8 +1077,8 @@ impl flatbuffers::SimpleToVerifyInSlice for Endianness {}
 #[repr(transparent)]
 #[derive(Clone, Copy, PartialEq)]
 pub struct Buffer(pub [u8; 16]);
-impl std::fmt::Debug for Buffer {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for Buffer {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("Buffer")
             .field("offset", &self.offset())
             .field("length", &self.length())
@@ -1107,7 +1107,7 @@ impl<'b> flatbuffers::Push for Buffer {
     #[inline]
     fn push(&self, dst: &mut [u8], _rest: &[u8]) {
         let src = unsafe {
-            ::std::slice::from_raw_parts(self as *const Buffer as *const u8, Self::size())
+            ::core::slice::from_raw_parts(self as *const Buffer as *const u8, Self::size())
         };
         dst.copy_from_slice(src);
     }
@@ -1118,7 +1118,7 @@ impl<'b> flatbuffers::Push for &'b Buffer {
     #[inline]
     fn push(&self, dst: &mut [u8], _rest: &[u8]) {
         let src = unsafe {
-            ::std::slice::from_raw_parts(*self as *const Buffer as *const u8, Self::size())
+            ::core::slice::from_raw_parts(*self as *const Buffer as *const u8, Self::size())
         };
         dst.copy_from_slice(src);
     }
@@ -1270,8 +1270,8 @@ impl<'a: 'b, 'b> NullBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Null<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Null<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Null");
         ds.finish()
     }
@@ -1349,8 +1349,8 @@ impl<'a: 'b, 'b> Struct_Builder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Struct_<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Struct_<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Struct_");
         ds.finish()
     }
@@ -1425,8 +1425,8 @@ impl<'a: 'b, 'b> ListBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for List<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for List<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("List");
         ds.finish()
     }
@@ -1503,8 +1503,8 @@ impl<'a: 'b, 'b> LargeListBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for LargeList<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for LargeList<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("LargeList");
         ds.finish()
     }
@@ -1599,8 +1599,8 @@ impl<'a: 'b, 'b> FixedSizeListBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for FixedSizeList<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for FixedSizeList<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("FixedSizeList");
         ds.field("listSize", &self.listSize());
         ds.finish()
@@ -1721,8 +1721,8 @@ impl<'a: 'b, 'b> MapBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Map<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Map<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Map");
         ds.field("keysSorted", &self.keysSorted());
         ds.finish()
@@ -1847,8 +1847,8 @@ impl<'a: 'b, 'b> UnionBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Union<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Union<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Union");
         ds.field("mode", &self.mode());
         ds.field("typeIds", &self.typeIds());
@@ -1959,8 +1959,8 @@ impl<'a: 'b, 'b> IntBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Int<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Int<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Int");
         ds.field("bitWidth", &self.bitWidth());
         ds.field("is_signed", &self.is_signed());
@@ -2058,8 +2058,8 @@ impl<'a: 'b, 'b> FloatingPointBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for FloatingPoint<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for FloatingPoint<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("FloatingPoint");
         ds.field("precision", &self.precision());
         ds.finish()
@@ -2136,8 +2136,8 @@ impl<'a: 'b, 'b> Utf8Builder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Utf8<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Utf8<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Utf8");
         ds.finish()
     }
@@ -2213,8 +2213,8 @@ impl<'a: 'b, 'b> BinaryBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Binary<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Binary<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Binary");
         ds.finish()
     }
@@ -2291,8 +2291,8 @@ impl<'a: 'b, 'b> LargeUtf8Builder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for LargeUtf8<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for LargeUtf8<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("LargeUtf8");
         ds.finish()
     }
@@ -2369,8 +2369,8 @@ impl<'a: 'b, 'b> LargeBinaryBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for LargeBinary<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for LargeBinary<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("LargeBinary");
         ds.finish()
     }
@@ -2465,8 +2465,8 @@ impl<'a: 'b, 'b> FixedSizeBinaryBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for FixedSizeBinary<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for FixedSizeBinary<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("FixedSizeBinary");
         ds.field("byteWidth", &self.byteWidth());
         ds.finish()
@@ -2542,8 +2542,8 @@ impl<'a: 'b, 'b> BoolBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Bool<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Bool<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Bool");
         ds.finish()
     }
@@ -2676,8 +2676,8 @@ impl<'a: 'b, 'b> DecimalBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Decimal<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Decimal<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Decimal");
         ds.field("precision", &self.precision());
         ds.field("scale", &self.scale());
@@ -2782,8 +2782,8 @@ impl<'a: 'b, 'b> DateBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Date<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Date<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Date");
         ds.field("unit", &self.unit());
         ds.finish()
@@ -2896,8 +2896,8 @@ impl<'a: 'b, 'b> TimeBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Time<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Time<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Time");
         ds.field("unit", &self.unit());
         ds.field("bitWidth", &self.bitWidth());
@@ -3042,8 +3042,8 @@ impl<'a: 'b, 'b> TimestampBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Timestamp<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Timestamp<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Timestamp");
         ds.field("unit", &self.unit());
         ds.field("timezone", &self.timezone());
@@ -3141,8 +3141,8 @@ impl<'a: 'b, 'b> IntervalBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Interval<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Interval<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Interval");
         ds.field("unit", &self.unit());
         ds.finish()
@@ -3239,8 +3239,8 @@ impl<'a: 'b, 'b> DurationBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Duration<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Duration<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Duration");
         ds.field("unit", &self.unit());
         ds.finish()
@@ -3358,8 +3358,8 @@ impl<'a: 'b, 'b> KeyValueBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for KeyValue<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for KeyValue<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("KeyValue");
         ds.field("key", &self.key());
         ds.field("value", &self.value());
@@ -3531,8 +3531,8 @@ impl<'a: 'b, 'b> DictionaryEncodingBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for DictionaryEncoding<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for DictionaryEncoding<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("DictionaryEncoding");
         ds.field("id", &self.id());
         ds.field("indexType", &self.indexType());
@@ -4088,8 +4088,8 @@ impl<'a: 'b, 'b> FieldBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Field<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Field<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Field");
         ds.field("name", &self.name());
         ds.field("nullable", &self.nullable());
@@ -4500,8 +4500,8 @@ impl<'a: 'b, 'b> SchemaBuilder<'a, 'b> {
     }
 }
 
-impl std::fmt::Debug for Schema<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Debug for Schema<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let mut ds = f.debug_struct("Schema");
         ds.field("endianness", &self.endianness());
         ds.field("fields", &self.fields());

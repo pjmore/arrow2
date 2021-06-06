@@ -1,10 +1,10 @@
-use std::iter::FromIterator;
-use std::ptr::NonNull;
-use std::usize;
-use std::{fmt::Debug, mem::size_of};
+use core::iter::FromIterator;
+use core::ptr::NonNull;
+use core::usize;
+use core::{fmt::Debug, mem::size_of};
 
 use crate::types::NativeType;
-use crate::{alloc, trusted_len::TrustedLen};
+use crate::{arrow_alloc, trusted_len::TrustedLen};
 
 use super::{
     bytes::{Bytes, Deallocation},
@@ -46,7 +46,7 @@ impl<T: NativeType> MutableBuffer<T> {
     /// Creates an empty [`MutableBuffer`]. This does not allocate in the heap.
     #[inline]
     pub fn new() -> Self {
-        let ptr = alloc::allocate_aligned(0);
+        let ptr = arrow_alloc::allocate_aligned(0);
         Self {
             ptr,
             len: 0,
@@ -58,7 +58,7 @@ impl<T: NativeType> MutableBuffer<T> {
     #[inline]
     pub fn with_capacity(capacity: usize) -> Self {
         let capacity = capacity_multiple_of_64::<T>(capacity);
-        let ptr = alloc::allocate_aligned(capacity);
+        let ptr = arrow_alloc::allocate_aligned(capacity);
         Self {
             ptr,
             len: 0,
@@ -80,7 +80,7 @@ impl<T: NativeType> MutableBuffer<T> {
     #[inline]
     pub fn from_len_zeroed(len: usize) -> Self {
         let new_capacity = capacity_multiple_of_64::<T>(len);
-        let ptr = alloc::allocate_aligned_zeroed(new_capacity);
+        let ptr = arrow_alloc::allocate_aligned_zeroed(new_capacity);
         Self {
             ptr,
             len,
@@ -133,7 +133,7 @@ impl<T: NativeType> MutableBuffer<T> {
             if self.capacity == 0 && value == T::default() {
                 // edge case where the allocate
                 let required_cap = capacity_multiple_of_64::<T>(new_len);
-                let ptr = alloc::allocate_aligned_zeroed(required_cap);
+                let ptr = arrow_alloc::allocate_aligned_zeroed(required_cap);
                 self.ptr = ptr;
                 self.capacity = required_cap;
                 self.len = new_len;
@@ -146,7 +146,7 @@ impl<T: NativeType> MutableBuffer<T> {
                 // write the value
                 let mut ptr = self.ptr.as_ptr().add(self.len);
                 (0..diff).for_each(|_| {
-                    std::ptr::write(ptr, value);
+                    core::ptr::write(ptr, value);
                     ptr = ptr.add(1);
                 })
             }
@@ -222,7 +222,7 @@ impl<T: NativeType> MutableBuffer<T> {
         unsafe {
             let dst = self.ptr.as_ptr().add(self.len);
             let src = items.as_ptr();
-            std::ptr::copy_nonoverlapping(src, dst, additional)
+            core::ptr::copy_nonoverlapping(src, dst, additional)
         }
         self.len += additional;
     }
@@ -240,7 +240,7 @@ impl<T: NativeType> MutableBuffer<T> {
         self.reserve(1);
         unsafe {
             let dst = self.ptr.as_ptr().add(self.len) as *mut T;
-            std::ptr::write(dst, item);
+            core::ptr::write(dst, item);
         }
         self.len += 1;
     }
@@ -251,7 +251,7 @@ impl<T: NativeType> MutableBuffer<T> {
     #[inline]
     pub(crate) unsafe fn push_unchecked(&mut self, item: T) {
         let dst = self.ptr.as_ptr().add(self.len);
-        std::ptr::write(dst, item);
+        core::ptr::write(dst, item);
         self.len += 1;
     }
 
@@ -291,7 +291,7 @@ impl<T: NativeType> MutableBuffer<T> {
             //      necessity
             //  Soundness
             //      `self.ptr` is valid for `self.capacity`.
-            let ptr = unsafe { alloc::reallocate(self.ptr, self.capacity, new_capacity) };
+            let ptr = unsafe { arrow_alloc::reallocate(self.ptr, self.capacity, new_capacity) };
 
             self.ptr = ptr;
             self.capacity = new_capacity;
@@ -308,8 +308,8 @@ unsafe fn reallocate<T: NativeType>(
     new_capacity: usize,
 ) -> (NonNull<T>, usize) {
     let new_capacity = capacity_multiple_of_64::<T>(new_capacity);
-    let new_capacity = std::cmp::max(new_capacity, old_capacity * 2);
-    let ptr = alloc::reallocate(ptr, old_capacity, new_capacity);
+    let new_capacity = core::cmp::max(new_capacity, old_capacity * 2);
+    let ptr = arrow_alloc::reallocate(ptr, old_capacity, new_capacity);
     (ptr, new_capacity)
 }
 
@@ -335,7 +335,7 @@ impl<T: NativeType> MutableBuffer<T> {
         while len.local_len < capacity {
             if let Some(item) = iterator.next() {
                 unsafe {
-                    std::ptr::write(dst, item);
+                    core::ptr::write(dst, item);
                     dst = dst.add(1);
                 }
                 len.local_len += 1;
@@ -370,7 +370,7 @@ impl<T: NativeType> MutableBuffer<T> {
         let mut dst = self.ptr.as_ptr().add(self.len);
         for item in iterator {
             // note how there is no reserve here (compared with `extend_from_iter`)
-            std::ptr::write(dst, item);
+            core::ptr::write(dst, item);
             dst = dst.add(1);
         }
         assert_eq!(
@@ -432,9 +432,9 @@ impl<T: NativeType> MutableBuffer<T> {
     /// Creates a [`MutableBuffer`] from an [`Iterator`] with a [`TrustedLen`] iterator, or errors
     /// if any of the items of the iterator is an error.
     #[inline]
-    pub fn try_from_trusted_len_iter<E, I: TrustedLen<Item = std::result::Result<T, E>>>(
+    pub fn try_from_trusted_len_iter<E, I: TrustedLen<Item = core::result::Result<T, E>>>(
         iterator: I,
-    ) -> std::result::Result<Self, E> {
+    ) -> core::result::Result<Self, E> {
         unsafe { Self::try_from_trusted_len_iter_unchecked(iterator) }
     }
 
@@ -449,10 +449,10 @@ impl<T: NativeType> MutableBuffer<T> {
     /// to use it on an iterator that reports an incorrect length.
     pub unsafe fn try_from_trusted_len_iter_unchecked<
         E,
-        I: Iterator<Item = std::result::Result<T, E>>,
+        I: Iterator<Item = core::result::Result<T, E>>,
     >(
         iterator: I,
-    ) -> std::result::Result<Self, E> {
+    ) -> core::result::Result<Self, E> {
         let (_, upper) = iterator.size_hint();
         let upper = upper.expect("try_from_trusted_len_iter requires an upper limit");
         let len = upper;
@@ -461,7 +461,7 @@ impl<T: NativeType> MutableBuffer<T> {
 
         let mut dst = buffer.ptr.as_ptr();
         for item in iterator {
-            std::ptr::write(dst, item?);
+            core::ptr::write(dst, item?);
             dst = dst.add(1);
         }
         assert_eq!(
@@ -485,7 +485,7 @@ impl<T: NativeType> FromIterator<T> for MutableBuffer<T> {
                 let (lower, _) = iterator.size_hint();
                 let mut buffer = MutableBuffer::with_capacity(lower.saturating_add(1));
                 unsafe {
-                    std::ptr::write(buffer.as_mut_ptr(), element);
+                    core::ptr::write(buffer.as_mut_ptr(), element);
                     buffer.len = 1;
                 }
                 buffer
@@ -503,25 +503,25 @@ impl<T: NativeType> Default for MutableBuffer<T> {
     }
 }
 
-impl<T: NativeType> std::ops::Deref for MutableBuffer<T> {
+impl<T: NativeType> core::ops::Deref for MutableBuffer<T> {
     type Target = [T];
 
     #[inline]
     fn deref(&self) -> &[T] {
-        unsafe { std::slice::from_raw_parts(self.as_ptr(), self.len) }
+        unsafe { core::slice::from_raw_parts(self.as_ptr(), self.len) }
     }
 }
 
-impl<T: NativeType> std::ops::DerefMut for MutableBuffer<T> {
+impl<T: NativeType> core::ops::DerefMut for MutableBuffer<T> {
     #[inline]
     fn deref_mut(&mut self) -> &mut [T] {
-        unsafe { std::slice::from_raw_parts_mut(self.as_mut_ptr(), self.len) }
+        unsafe { core::slice::from_raw_parts_mut(self.as_mut_ptr(), self.len) }
     }
 }
 
 impl<T: NativeType> Drop for MutableBuffer<T> {
     fn drop(&mut self) {
-        unsafe { alloc::free_aligned(self.ptr, self.capacity) };
+        unsafe { arrow_alloc::free_aligned(self.ptr, self.capacity) };
     }
 }
 
@@ -572,7 +572,7 @@ impl<T: NativeType> From<MutableBuffer<T>> for Bytes<T> {
             )
         };
         // so that the memory region is not deallocated.
-        std::mem::forget(buffer);
+        core::mem::forget(buffer);
         result
     }
 }
@@ -580,13 +580,13 @@ impl<T: NativeType> From<MutableBuffer<T>> for Bytes<T> {
 impl From<MutableBuffer<u64>> for MutableBuffer<u8> {
     #[inline]
     fn from(buffer: MutableBuffer<u64>) -> Self {
-        let ratio = std::mem::size_of::<u64>() / std::mem::size_of::<u8>();
+        let ratio = core::mem::size_of::<u64>() / core::mem::size_of::<u8>();
 
         let capacity = buffer.capacity * ratio;
         let len = buffer.len * ratio;
         let ptr = unsafe { NonNull::new_unchecked(buffer.ptr.as_ptr() as *mut u8) };
         // so that the memory region is not deallocated; ownership was transfered
-        std::mem::forget(buffer);
+        core::mem::forget(buffer);
         Self { ptr, len, capacity }
     }
 }
@@ -609,6 +609,7 @@ impl MutableBuffer<u8> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use alloc::string::String;
 
     #[test]
     fn default() {
@@ -681,7 +682,7 @@ mod tests {
     #[test]
     fn capacity() {
         let b = MutableBuffer::<f32>::with_capacity(10);
-        assert_eq!(b.capacity(), 64 / std::mem::size_of::<f32>());
+        assert_eq!(b.capacity(), 64 / core::mem::size_of::<f32>());
         let b = MutableBuffer::<f32>::with_capacity(16);
         assert_eq!(b.capacity(), 16);
 

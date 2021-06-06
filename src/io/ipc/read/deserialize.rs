@@ -52,7 +52,7 @@ fn read_buffer<T: NativeType, R: Read + Seek>(
 
     reader.seek(SeekFrom::Start(block_offset + buf.offset() as u64))?;
 
-    let bytes = length * std::mem::size_of::<T>();
+    let bytes = length * core::mem::size_of::<T>();
     if bytes > buf.length() as usize {
         return Err(std::io::Error::new(
             std::io::ErrorKind::InvalidData,
@@ -61,7 +61,7 @@ fn read_buffer<T: NativeType, R: Read + Seek>(
             However, this array reports {} slots, which, for physical type \"{}\", corresponds to {} bytes, \
             which is larger than the buffer length {}",
                 length,
-                std::any::type_name::<T>(),
+                core::any::type_name::<T>(),
                 bytes,
                 buf.length(),
             ),
@@ -76,7 +76,7 @@ fn read_buffer<T: NativeType, R: Read + Seek>(
         // fast case where we can just copy the contents as is
         unsafe {
             // transmute T to bytes.
-            let slice = std::slice::from_raw_parts_mut(buffer.as_mut_ptr() as *mut u8, bytes);
+            let slice = core::slice::from_raw_parts_mut(buffer.as_mut_ptr() as *mut u8, bytes);
             reader.read_exact(slice)?;
         }
     } else {
@@ -85,7 +85,7 @@ fn read_buffer<T: NativeType, R: Read + Seek>(
         reader.read_exact(&mut slice)?;
 
         if !is_little_endian {
-            let chunks = slice.chunks_exact(std::mem::size_of::<T>());
+            let chunks = slice.chunks_exact(core::mem::size_of::<T>());
             buffer
                 .as_mut_slice()
                 .iter_mut()

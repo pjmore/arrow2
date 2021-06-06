@@ -14,7 +14,8 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-
+use alloc::vec::Vec;
+use alloc::string::String;
 /// Converts numeric type to a `String`
 #[inline]
 pub fn lexical_to_bytes<N: lexical_core::ToLexical>(n: N) -> Vec<u8> {
@@ -26,7 +27,7 @@ pub fn lexical_to_bytes<N: lexical_core::ToLexical>(n: N) -> Vec<u8> {
         //  Soundness
         //      Length of buf is set as written length afterwards. lexical_core
         //      creates a valid string, so doesn't need to be checked.
-        let slice = std::slice::from_raw_parts_mut(buf.as_mut_ptr(), buf.capacity());
+        let slice = core::slice::from_raw_parts_mut(buf.as_mut_ptr(), buf.capacity());
         let len = lexical_core::write(n, slice).len();
         buf.set_len(len);
     }

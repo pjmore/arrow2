@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use hashbrown::HashMap;
 
 // Convert a parquet schema into Arrow schema
 use parquet2::{

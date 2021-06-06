@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use crate::{
     array::{Array, FixedSizeBinaryArray},
@@ -10,7 +10,8 @@ use super::{
     utils::{build_extend_null_bits, ExtendNullBits},
     Growable,
 };
-
+use alloc::vec::Vec;
+use alloc::boxed::Box;
 /// Concrete [`Growable`] for the [`FixedSizeBinaryArray`].
 pub struct GrowableFixedSizeBinary<'a> {
     arrays: Vec<&'a FixedSizeBinaryArray>,
@@ -58,8 +59,8 @@ impl<'a> GrowableFixedSizeBinary<'a> {
     }
 
     fn to(&mut self) -> FixedSizeBinaryArray {
-        let validity = std::mem::take(&mut self.validity);
-        let values = std::mem::take(&mut self.values);
+        let validity = core::mem::take(&mut self.validity);
+        let values = core::mem::take(&mut self.values);
 
         FixedSizeBinaryArray::from_data(
             self.arrays[0].data_type().clone(),
@@ -107,7 +108,7 @@ impl<'a> From<GrowableFixedSizeBinary<'a>> for FixedSizeBinaryArray {
 
 #[cfg(test)]
 mod tests {
-    use std::iter::FromIterator;
+    use core::iter::FromIterator;
 
     use super::*;
     use crate::array::FixedSizeBinaryPrimitive;

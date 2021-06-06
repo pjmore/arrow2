@@ -1,5 +1,5 @@
-use std::{iter::FromIterator, sync::Arc};
-
+use core::iter::FromIterator;
+use alloc::sync::Arc;
 use crate::{
     array::{Array, Builder, IntoArray, Offset, ToArray, TryFromIterator},
     bitmap::MutableBitmap,
@@ -16,7 +16,7 @@ pub struct ListPrimitive<O: Offset, B: Builder<T>, T> {
     values: B,
     validity: MutableBitmap,
     length: O,
-    phantom: std::marker::PhantomData<T>,
+    phantom: core::marker::PhantomData<T>,
 }
 
 impl<O, T, B> ListPrimitive<O, B, T>
@@ -35,7 +35,7 @@ where
             values: B::with_capacity(0),
             validity: MutableBitmap::with_capacity(capacity),
             length,
-            phantom: std::marker::PhantomData,
+            phantom: core::marker::PhantomData,
         }
     }
 }

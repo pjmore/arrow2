@@ -16,7 +16,7 @@
 // under the License.
 
 use std::pin::Pin;
-use std::sync::Arc;
+use alloc::sync::Arc;
 
 use arrow_flight::{
     flight_service_server::FlightService, flight_service_server::FlightServiceServer,
@@ -31,7 +31,7 @@ use tonic::{
 type TonicStream<T> = Pin<Box<dyn Stream<Item = T> + Send + Sync + 'static>>;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
-type Result<T = (), E = Error> = std::result::Result<T, E>;
+type Result<T = (), E = Error> = core::result::Result<T, E>;
 
 use prost::Message;
 

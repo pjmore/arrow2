@@ -1,5 +1,5 @@
 //! Definition of basic mul operations with primitive arrays
-use std::ops::Mul;
+use core::ops::Mul;
 
 use num::{
     traits::{ops::overflowing::OverflowingMul, SaturatingMul},

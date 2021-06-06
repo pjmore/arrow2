@@ -5,7 +5,7 @@ use crate::{
     datatypes::DataType,
     error::{ArrowError, Result},
 };
-
+use alloc::boxed::Box;
 macro_rules! key_cast {
     ($keys:expr, $values:expr, $array:expr, $to_keys_type:expr, $to_type:ty) => {{
         let cast_keys = primitive_to_primitive::<_, $to_type>($keys, $to_keys_type);
@@ -15,7 +15,7 @@ macro_rules! key_cast {
         if cast_keys.null_count() > $keys.null_count() {
             return Err(ArrowError::DictionaryKeyOverflowError);
         }
-        Ok(Box::new(DictionaryArray::<$to_type>::from_data(
+        Ok(alloc::boxed::Box::new(DictionaryArray::<$to_type>::from_data(
             cast_keys, $values,
         )))
     }};

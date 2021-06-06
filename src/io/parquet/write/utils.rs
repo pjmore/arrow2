@@ -30,7 +30,7 @@ pub fn write_def_levels(
     // encode def levels
     match (is_optional, validity) {
         (true, Some(validity)) => encode_iter(validity.iter()),
-        (true, None) => encode_iter(std::iter::repeat(true).take(len)),
+        (true, None) => encode_iter(core::iter::repeat(true).take(len)),
         _ => Ok(vec![]), // is required => no def levels
     }
 }
