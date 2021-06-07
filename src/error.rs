@@ -91,6 +91,10 @@ impl Display for ArrowError {
     }
 }
 
+#[cfg(not(feature="std"))]
 impl Error for ArrowError {}
+
+#[cfg(feature="std")]
+impl std::error::Error for ArrowError{}
 
 pub type Result<T> = core::result::Result<T, ArrowError>;

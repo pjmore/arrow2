@@ -27,7 +27,8 @@ mod ipc {
 }
 
 use flatbuffers::{FlatBufferBuilder, ForwardsUOffset, UnionWIPOffset, Vector, WIPOffset};
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{BTreeMap};
+use hashbrown::HashMap;
 
 use DataType::*;
 

@@ -16,10 +16,11 @@
 // under the License.
 
 use std::{
-    collections::{BTreeMap, HashMap},
+    collections::{BTreeMap},
     convert::TryFrom,
 };
 
+use hashbrown::HashMap;
 use serde_derive::Deserialize;
 use serde_json::{json, Value};
 

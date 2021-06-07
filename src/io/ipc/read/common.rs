@@ -15,7 +15,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use std::collections::{HashMap, VecDeque};
+use std::collections::{ VecDeque};
+use hashbrown::HashMap;
 use std::io::{Read, Seek};
 use alloc::sync::Arc;
 
