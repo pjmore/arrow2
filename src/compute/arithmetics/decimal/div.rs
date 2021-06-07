@@ -32,6 +32,7 @@ use crate::{
     error::{ArrowError, Result},
 };
 use alloc::vec::Vec;
+use alloc::string::ToString;
 use super::{adjusted_precision_scale, max_value, number_digits};
 
 /// Divide two decimal primitive arrays with the same precision and scale. If

@@ -1,6 +1,4 @@
 use alloc::sync::Arc;
-use hashbrown::hash_map::DefaultHashBuilder;
-use alloc::boxed::Box;
 use core::hash::{Hash, Hasher};
 
 use hash_hasher::HashedMap;
@@ -14,14 +12,14 @@ use crate::{
 use super::{DictionaryArray, DictionaryKey};
 
 #[derive(Debug)]
-pub struct DictionaryPrimitive<K: DictionaryKey, B: Builder<T>, T: Hash, H: Hasher + Default = ahash::AHasher> {
+pub struct DictionaryPrimitive<K: DictionaryKey, B: Builder<T>, T: Hash> {
     keys: Primitive<K>,
     map: HashedMap<u64, K>,
     values: B,
     phantom: core::marker::PhantomData<T>,
 }
 
-impl<K: DictionaryKey, B: Builder<T>, T: Hash, H: Hasher + Default> DictionaryPrimitive<K, B, T, H> {
+impl<K: DictionaryKey, B: Builder<T>, T: Hash> DictionaryPrimitive<K, B, T> {
     fn with_capacity(capacity: usize) -> Self {
         Self {
             keys: Primitive::<K>::with_capacity(capacity),
@@ -68,12 +66,11 @@ where
     }
 }
 
-impl<K, B, T, H> TryFromIterator<Option<T>> for DictionaryPrimitive<K, B, T, H>
+impl<K, B, T> TryFromIterator<Option<T>> for DictionaryPrimitive<K, B, T>
 where
     K: DictionaryKey,
     B: Builder<T>,
     T: Hash,
-    H: Hasher + Default
 {
     fn try_from_iter<I: IntoIterator<Item = Result<Option<T>>>>(iter: I) -> Result<Self> {
         let iterator = iter.into_iter();
@@ -86,12 +83,11 @@ where
     }
 }
 
-impl<K, T, B, H> Builder<T> for DictionaryPrimitive<K, B, T, H>
+impl<K, T, B> Builder<T> for DictionaryPrimitive<K, B, T>
 where
     K: DictionaryKey,
     B: Builder<T>,
     T: Hash,
-    H: Hasher + Default,
 {
     fn with_capacity(capacity: usize) -> Self {
         Self::with_capacity(capacity)
@@ -101,7 +97,7 @@ where
     fn try_push(&mut self, value: Option<T>) -> Result<()> {
         match value {
             Some(v) => {
-                let mut hasher = H::default();
+                let mut hasher = ahash::AHasher::default();
                 v.hash(&mut hasher);
                 let hash = hasher.finish();
                 match self.map.get(&hash) {
@@ -131,7 +127,7 @@ where
 #[cfg(test)]
 mod tests {
     use crate::array::{Array, BinaryPrimitive, Utf8Primitive};
-
+    use alloc::boxed::Box;
     use super::*;
 
     #[test]

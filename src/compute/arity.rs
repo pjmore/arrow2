@@ -15,6 +15,8 @@ use crate::{
     datatypes::DataType,
 };
 
+use alloc::string::ToString;
+
 /// Applies an unary and infallible function to a primitive array. This is the
 /// fastest way to perform an operation on a primitive array when the benefits
 /// of a vectorized operation outweighs the cost of branching nulls and

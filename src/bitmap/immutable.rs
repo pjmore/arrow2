@@ -218,6 +218,8 @@ impl Bitmap {
     }
 
     #[inline]
+    #[allow(dead_code)]
+    //This code is not used by the core crate so it is allowed to not be used
     pub(crate) fn as_slice(&self) -> &[u8] {
         assert_eq!(self.offset % 8, 0); // slices only make sense when there is no offset
         let start = self.offset % 8;

@@ -21,6 +21,8 @@ use core::ptr::{self, NonNull};
 use alloc::sync::Arc;
 use alloc::vec::Vec;
 use alloc::string::String;
+use alloc::string::ToString;
+
 use crate::{
     array::Array,
     bitmap::{utils::bytes_for, Bitmap},

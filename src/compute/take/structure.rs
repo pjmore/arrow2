@@ -23,6 +23,7 @@ use crate::{
     error::Result,
 };
 
+use alloc::vec::Vec;
 use super::maybe_usize;
 
 #[inline]
@@ -56,7 +57,6 @@ fn take_validity<I: Offset>(
 }
 
 pub fn take<I: Offset>(array: &StructArray, indices: &PrimitiveArray<I>) -> Result<StructArray> {
-    use alloc::vec::Vec;
     let values: Vec<Arc<dyn Array>> = array
         .values()
         .iter()

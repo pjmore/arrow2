@@ -3,7 +3,6 @@ use crate::{
     array::{Array, FixedSizeListArray},
     bitmap::Bitmap,
 };
-use alloc::vec::Vec;
 
 use super::{
     equal_range,
@@ -75,7 +74,7 @@ mod tests {
     use crate::{array::equal::tests::test_equal, datatypes::DataType};
 
     use super::*;
-
+    use alloc::vec::Vec;
     /// Create a fixed size list of 2 value lengths
     fn create_fixed_size_list_array<U: AsRef<[i32]>, T: AsRef<[Option<U>]>>(
         data: T,

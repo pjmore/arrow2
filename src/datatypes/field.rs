@@ -19,7 +19,10 @@ use alloc::collections::BTreeMap;
 use alloc::string::String;
 use crate::error::{ArrowError, Result};
 
+use alloc::string::ToString;
+
 use super::DataType;
+
 
 /// A logical [`DataType`] and its associated metadata per
 /// [Arrow specification](https://arrow.apache.org/docs/cpp/api/datatype.html)

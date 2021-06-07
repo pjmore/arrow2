@@ -16,11 +16,10 @@
 // under the License.
 
 //! Utils to make testing easier
-use alloc::string::String;
-use alloc::boxed::Box;
-use crate::error::Error;
 
-//TODO: std feature
+
+
+#[cfg(feature="std")]
 use std::{env, error::Error, path::PathBuf};
 
 /// Returns the arrow test data directory, which is by default stored
@@ -37,12 +36,16 @@ use std::{env, error::Error, path::PathBuf};
 /// let csvdata = format!("{}/csv/aggregate_test_100.csv", testdata);
 /// assert!(std::path::PathBuf::from(csvdata).exists());
 /// ```
+#[cfg(feature="std")]
 pub fn arrow_test_data() -> String {
     match get_data_dir("ARROW_TEST_DATA", "testing/arrow-testing/data") {
         Ok(pb) => pb.display().to_string(),
         Err(err) => panic!("failed to get arrow data dir: {}", err),
     }
 }
+
+
+
 
 /// Returns a directory path for finding test data.
 ///
@@ -53,6 +56,7 @@ pub fn arrow_test_data() -> String {
 ///  Returns either:
 /// The path referred to in `udf_env` if that variable is set and refers to a directory
 /// The submodule_data directory relative to CARGO_MANIFEST_PATH
+#[cfg(feature="std")]
 fn get_data_dir(udf_env: &str, submodule_data: &str) -> Result<PathBuf, Box<dyn Error>> {
     // Try user defined env.
     if let Ok(dir) = env::var(udf_env) {

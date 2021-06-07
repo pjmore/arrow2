@@ -26,6 +26,7 @@ use crate::{
         utils::combine_validities,
     },
 };
+use alloc::string::ToString;
 use crate::{
     datatypes::DataType,
     error::{ArrowError, Result},

@@ -22,6 +22,7 @@ use crate::{
     error::{ArrowError, Result},
 };
 use alloc::boxed::Box;
+use alloc::string::ToString;
 
 mod boolean_to;
 mod dictionary_to;

@@ -22,6 +22,8 @@ use crate::{
     types::NativeType,
 };
 
+use alloc::string::ToString;
+
 /// Creates the scale required to add or subtract a Duration to a time array
 /// (Timestamp, Time, or Date). The resulting scale always multiplies the rhs
 /// number (Duration) so it can be added to the lhs number (time array).

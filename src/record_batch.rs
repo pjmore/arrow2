@@ -24,6 +24,7 @@ use alloc::vec::Vec;
 use crate::array::*;
 use crate::datatypes::*;
 use crate::error::{ArrowError, Result};
+use alloc::string::ToString;
 
 type ArrayRef = Arc<dyn Array>;
 

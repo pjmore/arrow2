@@ -5,6 +5,7 @@ use num::{
     traits::{ops::overflowing::OverflowingMul, SaturatingMul},
     CheckedMul, Zero,
 };
+use alloc::string::ToString;
 
 use crate::{
     array::{Array, PrimitiveArray},

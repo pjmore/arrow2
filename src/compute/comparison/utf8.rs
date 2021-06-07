@@ -19,6 +19,7 @@ use crate::error::{ArrowError, Result};
 use crate::{array::*, bitmap::Bitmap};
 
 use super::{super::utils::combine_validities, Operator};
+use alloc::string::ToString;
 
 /// Evaluate `op(lhs, rhs)` for [`PrimitiveArray`]s using a specified
 /// comparison function.

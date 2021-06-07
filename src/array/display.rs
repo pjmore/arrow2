@@ -7,6 +7,7 @@ use crate::{
 use alloc::boxed::Box;
 use alloc::string::String;
 use alloc::vec::Vec;
+use alloc::string::ToString;
 macro_rules! dyn_display {
     ($array:expr, $ty:ty, $expr:expr) => {{
         let a = $array.as_any().downcast_ref::<$ty>().unwrap();

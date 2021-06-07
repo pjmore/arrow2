@@ -156,7 +156,7 @@ fn naive_datetime_to_timestamp(s: &str, datetime: NaiveDateTime) -> Result<i64> 
 #[cfg(test)]
 mod tests {
     use super::*;
-
+    use alloc::string::ToString;
     #[test]
     fn utf8_to_timestamp_timezone() -> Result<()> {
         // Explicit timezone
@@ -276,9 +276,9 @@ mod tests {
     // Parse a timestamp to timestamp int with a useful human readable error message
     fn parse_timestamp(s: &str) -> Result<i64> {
         let result = utf8_to_timestamp_ns_scalar(s);
-        if let Err(e) = &result {
-            eprintln!("Error parsing timestamp '{}': {:?}", s, e);
-        }
+        //if let Err(e) = &result {
+        //    eprintln!("Error parsing timestamp '{}': {:?}", s, e);
+        //}
         result
     }
 

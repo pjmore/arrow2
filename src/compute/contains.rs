@@ -26,6 +26,7 @@ use crate::{
 };
 
 use super::utils::combine_validities;
+use alloc::string::ToString;
 
 /// Checks if a [`GenericListArray`] contains a value in the [`PrimitiveArray`]
 /// The validity will be equal to the `And` of both arrays.
@@ -44,7 +45,6 @@ where
             "Contains requires the inner array to be of the same logical type".to_string(),
         ));
     }
-
     let validity = combine_validities(list.validity(), values.validity());
 
     let values = list.iter().zip(values.iter()).map(|(list, values)| {

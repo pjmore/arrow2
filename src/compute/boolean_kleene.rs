@@ -4,6 +4,8 @@ use crate::{
     bitmap::{quaternary, ternary},
 };
 
+use alloc::string::ToString;
+
 /// Logical 'or' with [Kleene logic](https://en.wikipedia.org/wiki/Three-valued_logic#Kleene_and_Priest_logics)
 /// # Errors
 /// This function errors if the operands have different lengths.

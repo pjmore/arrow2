@@ -5,7 +5,7 @@ use num::{
     traits::{ops::overflowing::OverflowingSub, SaturatingSub},
     CheckedSub, Zero,
 };
-
+use alloc::string::ToString;
 use crate::{
     array::{Array, PrimitiveArray},
     bitmap::Bitmap,

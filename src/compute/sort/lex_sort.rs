@@ -24,6 +24,7 @@ use crate::{
     buffer::MutableBuffer,
     datatypes::DataType,
 };
+use alloc::string::ToString;
 use alloc::boxed::Box;
 use super::{sort_to_indices, SortOptions};
 use alloc::vec::Vec;

@@ -3,6 +3,7 @@ use crate::compute::comparison::primitive_compare_values_op;
 use crate::datatypes::DataType;
 use crate::error::{ArrowError, Result};
 use crate::{array::Array, types::NativeType};
+use alloc::string::ToString;
 
 use super::utils::combine_validities;
 use alloc::boxed::Box;

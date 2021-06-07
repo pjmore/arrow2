@@ -3,6 +3,8 @@ use core::fmt::{Debug, Display, Formatter};
 use alloc::boxed::Box;
 pub trait Error: core::fmt::Debug + core::fmt::Display{}
 use alloc::string::String;
+use alloc::string::ToString;
+
 /// Enum with all errors in this crate.
 #[derive(Debug)]
 pub enum ArrowError {
@@ -11,8 +13,7 @@ pub enum ArrowError {
     /// Triggered by an external error, such as CSV, serde, chrono.
     External(String, Box<dyn Error + Send + Sync>),
     Schema(String),
-    //TODO Conditionally compile this error
-    //Io(std::io::Error),
+    Io(String),
     InvalidArgumentError(String),
     /// Error during import or export to/from C Data Interface
     Ffi(String),
@@ -33,14 +34,20 @@ impl ArrowError {
         Self::External("".to_string(), Box::new(error))
     }
 }
-/*
-TODO: STD feature to allow this to compile when it is used by the normal rust code 
+
+//TODO: STD feature to allow this to compile when it is used by the normal rust code
+#[cfg(feature="std")] 
 impl From<::std::io::Error> for ArrowError {
     fn from(error: std::io::Error) -> Self {
-        ArrowError::Io(error)
+        ArrowError::Io(format!("{}", error))
     }
 }
-*/
+
+#[cfg(feature="std")]
+impl<E: std::error::Error> crate::error::Error for E{}
+
+#[cfg(not(feature="std"))]
+impl crate::error::Error for core::str::Utf8Error{}
 
 impl From<core::str::Utf8Error> for ArrowError {
     fn from(error: core::str::Utf8Error) -> Self {

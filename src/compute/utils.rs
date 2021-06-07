@@ -29,6 +29,7 @@ pub fn combine_validities(lhs: &Option<Bitmap>, rhs: &Option<Bitmap>) -> Option<
     }
 }
 
+#[allow(dead_code)]
 pub fn unary_utf8_boolean<O: Offset, F: Fn(&str) -> bool>(
     values: &Utf8Array<O>,
     op: F,

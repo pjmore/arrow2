@@ -19,6 +19,8 @@ use crate::array::{Array, BooleanArray};
 use crate::bitmap::{Bitmap, MutableBitmap};
 use crate::error::{ArrowError, Result};
 
+use alloc::string::ToString;
+
 use super::utils::combine_validities;
 
 /// Helper function to implement binary kernels

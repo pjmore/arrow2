@@ -22,6 +22,7 @@ use crate::{
     buffer::MutableBuffer,
     error::{ArrowError, Result},
 };
+use alloc::string::ToString;
 
 use super::{super::utils::combine_validities, Operator};
 

@@ -21,6 +21,8 @@ use alloc::string::String;
 use super::Field;
 use alloc::vec::Vec;
 
+use alloc::string::ToString;
+
 /// An ordered sequence of [`Field`] with optional metadata.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Schema {

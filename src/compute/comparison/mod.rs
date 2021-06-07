@@ -26,6 +26,7 @@ use crate::array::*;
 use crate::datatypes::{DataType, IntervalUnit};
 use crate::error::{ArrowError, Result};
 use crate::types::days_ms;
+use alloc::string::ToString;
 
 mod primitive;
 mod utf8;

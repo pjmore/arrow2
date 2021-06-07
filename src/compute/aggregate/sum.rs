@@ -14,7 +14,13 @@ use crate::{
 pub trait Sum<T> {
     fn simd_sum(self) -> T;
 }
-use std_detect::is_x86_feature_detected;
+//use std_detect::is_x86_feature_detected;
+
+macro_rules! is_x86_feature_detected{
+    ($LIT:literal)=>{{
+        true
+    }};
+}
 
 
 #[multiversion]

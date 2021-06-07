@@ -21,6 +21,8 @@ use prettytable::format;
 use prettytable::{Cell, Row, Table};
 use alloc::vec::Vec;
 use alloc::string::String;
+use alloc::string::ToString;
+
 /// Returns a visual representation of multiple [`RecordBatch`]es.
 pub fn write(batches: &[RecordBatch]) -> Result<String> {
     Ok(create_table(batches)?.to_string())

@@ -2,7 +2,6 @@ use crate::{
     array::{Array, ListArray, Offset},
     bitmap::Bitmap,
 };
-use alloc::vec::Vec;
 
 use super::{
     equal_range,
@@ -160,6 +159,7 @@ mod tests {
     use crate::{array::equal::tests::test_equal, datatypes::DataType};
 
     use super::*;
+    use alloc::vec::Vec;
 
     fn create_list_array<U: AsRef<[i32]>, T: AsRef<[Option<U>]>>(data: T) -> ListArray<i32> {
         let data_type = ListArray::<i32>::default_datatype(DataType::Int32);

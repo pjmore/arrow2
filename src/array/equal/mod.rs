@@ -4,7 +4,6 @@ use crate::{
     datatypes::{DataType, IntervalUnit},
     types::{days_ms, NativeType},
 };
-use alloc::vec::Vec;
 
 use super::{
     primitive::PrimitiveArray, Array, BinaryArray, BooleanArray, DictionaryArray, DictionaryKey,
@@ -627,7 +626,8 @@ mod tests {
     use alloc::string::String;
 
     use crate::array::{BooleanArray, Int16Array, Int32Array, Offset};
-
+    use alloc::vec::Vec;
+    use alloc::borrow::ToOwned;
     use super::*;
 
     #[test]

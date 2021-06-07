@@ -12,6 +12,7 @@ use crate::{
     error::{ArrowError, Result},
     types::NativeType,
 };
+use alloc::string::ToString;
 
 /// Divides two primitive arrays with the same type.
 /// Panics if the divisor is zero of one pair of values overflows.

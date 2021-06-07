@@ -26,6 +26,7 @@ use crate::{
     datatypes::{DataType, IntervalUnit},
 };
 
+use alloc::string::ToString;
 /// A trait representing an Arrow array. Arrow arrays are trait objects
 /// that are infalibly downcasted to concrete types according to the `Array::data_type`.
 pub trait Array: core::fmt::Debug + Send + Sync + ToFfi {

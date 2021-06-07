@@ -5,6 +5,7 @@ use num::{
     traits::{ops::overflowing::OverflowingAdd, SaturatingAdd},
     CheckedAdd, Zero,
 };
+use alloc::string::ToString;
 
 use crate::{
     array::{Array, PrimitiveArray},
@@ -40,6 +41,7 @@ pub fn add<T>(lhs: &PrimitiveArray<T>, rhs: &PrimitiveArray<T>) -> Result<Primit
 where
     T: NativeType + Add<Output = T>,
 {
+
     if lhs.data_type() != rhs.data_type() {
         return Err(ArrowError::InvalidArgumentError(
             "Arrays must have the same logical type".to_string(),
